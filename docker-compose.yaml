@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  parking:
+    build:
+      context: .
+      dockerfile: ./parking/app.dockerfile
+    depends_on:
+      - parking_db
+    environment:
+      DATABASE_URL: postgres://parking:123456@parking_db/parking?sslmode=disable
+    restart: on-failure
+
+  parking_db:
+    build:
+      context: ./parking
+      dockerfile: ./db.dockerfile
+    environment:
+      POSTGRES_DB: parking
+      POSTGRES_USER: parking
+      POSTGRES_PASSWORD: 123456
+    restart: unless-stopped
