@@ -8,6 +8,14 @@ message Park {
   string CarColour = 3;
 }
 
+message Slot {
+  uint64 SlotNum = 1;
+}
+
+message Car {
+  string CarReg = 1;
+}
+
 message CreateLotRequest {
   uint64 MaxSlotsCount = 1;
 }
@@ -46,7 +54,7 @@ message GetCarRegsByColourRequest {
 }
 
 message GetCarRegsByColourResponse {
-  repeated CarReg CarRegs = 1;
+  repeated Car Cars = 1;
 }
 
 message GetSlotsByColourRequest {
@@ -54,7 +62,7 @@ message GetSlotsByColourRequest {
 }
 
 message GetSlotsByColourResponse {
-  repeated SlotNum SlotNums = 1;
+  repeated Slot Slots = 1;
 }
 
 message GetSlotByCarRegRequest {
