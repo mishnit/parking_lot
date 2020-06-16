@@ -27,7 +27,7 @@ LANGUAGE 'plpgsql';
 CREATE FUNCTION dec_used_slot() RETURNS TRIGGER
 AS $_$
 BEGIN
-UPDATE parking_lots SET used_slots_count = used_slots_count - 1  WHERE id = NEW.park_lot_id;
+UPDATE parking_lots SET used_slots_count = used_slots_count - 1  WHERE id = OLD.park_lot_id;
 RETURN NEW;
 END $_$
 LANGUAGE 'plpgsql';

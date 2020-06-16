@@ -1,5 +1,5 @@
 syntax = "proto3";
-package pb;
+package protobuf;
 import "google/api/annotations.proto";
 
 message Park {
@@ -21,8 +21,7 @@ message CreateLotRequest {
 }
 
 message CreateLotResponse {
-  uint64 MaxSlotsCount = 1;
-  string status = 2;
+  string status = 1;
 }
 
 message PostParkRequest {

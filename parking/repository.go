@@ -9,7 +9,7 @@ import (
 
 type Repository interface {
 	Close()
-	CreateLot(ctx context.Context, MaxSlotsCount uint64) error
+	CreateLot(ctx context.Context, maxslotscount uint64) error
 	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
 	PostUnpark(ctx context.Context, slotnum uint64) error
 	GetParks(ctx context.Context) ([]Park, error)
@@ -38,8 +38,8 @@ func (r *postgresRepository) Close() {
 	r.db.Close()
 }
 
-func (r *postgresRepository) CreateLot(ctx context.Context, MaxSlotsCount uint64) error {
-	_, err := r.db.ExecContext(ctx, `INSERT INTO parking_lots(max_slots_count) VALUES($1)`, MaxSlotsCount)
+func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint64) error {
+	_, err := r.db.ExecContext(ctx, `INSERT INTO parking_lots(max_slots_count) VALUES($1)`, maxslotscount)
 	return err
 }
 

@@ -10,7 +10,7 @@ var (
 )
 
 type Service interface {
-	CreateLot(ctx context.Context, MaxSlotsCount uint64) error
+	CreateLot(ctx context.Context, maxslotscount uint64) error
 	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
 	PostUnpark(ctx context.Context, slotnum uint64) error
 	GetParks(ctx context.Context) ([]Park, error)
@@ -41,8 +41,8 @@ func NewService(r Repository) Service {
 	return &ParkingService{r}
 }
 
-func (s *ParkingService) CreateLot(ctx context.Context, MaxSlotsCount uint64) error {
-	err := s.repository.CreateLot(ctx, MaxSlotsCount)
+func (s *ParkingService) CreateLot(ctx context.Context, maxslotscount uint64) error {
+	err := s.repository.CreateLot(ctx, maxslotscount)
 	if err != nil {
 		return err
 	}

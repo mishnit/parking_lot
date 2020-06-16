@@ -1,0 +1,314 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "parking.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/createlot": {
+      "post": {
+        "operationId": "CreateLot",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufCreateLotResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protobufCreateLotRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    },
+    "/api/getcarregs/colour/{CarColour}": {
+      "get": {
+        "operationId": "GetCarRegsByColour",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufGetCarRegsByColourResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "CarColour",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    },
+    "/api/getparks": {
+      "get": {
+        "operationId": "GetParks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufGetParksResponse"
+            }
+          }
+        },
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    },
+    "/api/getslot/reg/{CarReg}": {
+      "get": {
+        "operationId": "GetSlotByCarReg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufGetSlotByCarRegResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "CarReg",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    },
+    "/api/getslots/colour/{CarColour}": {
+      "get": {
+        "operationId": "GetSlotsByColour",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufGetSlotsByColourResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "CarColour",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    },
+    "/api/postpark": {
+      "post": {
+        "operationId": "PostPark",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufPostParkResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protobufPostParkRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    },
+    "/api/postunpark": {
+      "post": {
+        "operationId": "PostUnpark",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protobufPostUnparkResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protobufPostUnparkRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ParkingService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufCar": {
+      "type": "object",
+      "properties": {
+        "CarReg": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufCreateLotRequest": {
+      "type": "object",
+      "properties": {
+        "MaxSlotsCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "protobufCreateLotResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufGetCarRegsByColourResponse": {
+      "type": "object",
+      "properties": {
+        "Cars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufCar"
+          }
+        }
+      }
+    },
+    "protobufGetParksResponse": {
+      "type": "object",
+      "properties": {
+        "Parks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufPark"
+          }
+        }
+      }
+    },
+    "protobufGetSlotByCarRegResponse": {
+      "type": "object",
+      "properties": {
+        "SlotNum": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "protobufGetSlotsByColourResponse": {
+      "type": "object",
+      "properties": {
+        "Slots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufSlot"
+          }
+        }
+      }
+    },
+    "protobufPark": {
+      "type": "object",
+      "properties": {
+        "SlotNum": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "CarReg": {
+          "type": "string"
+        },
+        "CarColour": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufPostParkRequest": {
+      "type": "object",
+      "properties": {
+        "CarReg": {
+          "type": "string"
+        },
+        "CarColour": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufPostParkResponse": {
+      "type": "object",
+      "properties": {
+        "Park": {
+          "$ref": "#/definitions/protobufPark"
+        }
+      }
+    },
+    "protobufPostUnparkRequest": {
+      "type": "object",
+      "properties": {
+        "SlotNum": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "protobufPostUnparkResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufSlot": {
+      "type": "object",
+      "properties": {
+        "SlotNum": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    }
+  }
+}
