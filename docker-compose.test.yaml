@@ -1,22 +1,24 @@
 version: "3.6"
 
 services:
-  parking_tests:
-    build:
-      context: .
-      dockerfile: ./parking/deploy/app.test.dockerfile
-    depends_on:
-      - parking_db
-    environment:
-      DATABASE_URL: postgres://parking:123456@parking_db/parking_test?sslmode=disable
-    restart: on-failure
-
   parking_db:
     build:
-      context: ./parking
-      dockerfile: ./deploy/db.test.dockerfile
+      context: ./parking/up
+      dockerfile: ./db.test.dockerfile
     environment:
       POSTGRES_DB: parking_test
       POSTGRES_USER: parking
       POSTGRES_PASSWORD: 123456
     restart: unless-stopped
+
+  parking_tests:
+    build:
+      context: .
+      dockerfile: ./parking/app.test.dockerfile
+    ports:
+      - "8000:8080"
+    depends_on:
+      - parking_db
+    environment:
+      DATABASE_URL: postgres://parking:123456@parking_db/parking_test?sslmode=disable
+    restart: on-failure
