@@ -1,15 +1,13 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE DATABASE IF NOT EXISTS parking;
 
 CREATE TABLE IF NOT EXISTS park_lots (
-  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id SERIAL PRIMARY KEY,
   max_slot_num INT NOT NULL,
   used_slot_count INT NOT NULL DEFAULT 0 CHECK (used_slot_count >= 0), CHECK (used_slot_count <= max_slot_num)
 );
 
 CREATE TABLE IF NOT EXISTS parks (
-  park_lot_id UUID REFERENCES park_lots,
+  park_lot_id INT REFERENCES park_lots, --insertion allowed at latest lot only i.e. max(park_lot_id)
   slot_num INT NOT NULL UNIQUE,
   car_num VARCHAR NOT NULL UNIQUE,
   car_color VARCHAR NOT NULL,
