@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS park_lots (
 CREATE TABLE IF NOT EXISTS parks (
   park_lot_id INT REFERENCES park_lots, --insertion allowed at latest lot only i.e. max(park_lot_id)
   slot_num INT NOT NULL UNIQUE,
-  car_num VARCHAR NOT NULL UNIQUE,
+  car_reg VARCHAR NOT NULL UNIQUE,
   car_color VARCHAR NOT NULL,
   PRIMARY KEY (park_lot_id, slot_num)
 );
