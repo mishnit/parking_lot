@@ -46,7 +46,7 @@ func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint32
 func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error) {
 	p := &Park{}
 	//select recent created parking lot
-	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
+	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	var ParkingLotID uint32
 	var MaxSlotsCount uint32
 	var UsedSlotsCount uint32
@@ -74,7 +74,7 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 		return nil, err
 	}
 
-	rows, err := r.db.QueryContext(ctx, `SELECT slot_num FROM parks WHERE parking_lot_id = $1 ORDER BY slot_num ASC)`, ParkingLotID)
+	rows, err := r.db.QueryContext(ctx, `SELECT slot_num FROM parks WHERE parking_lot_id = $1 ORDER BY slot_num ASC`, ParkingLotID)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 	if _, err := tx.Exec(`UPDATE parking_lots SET next_slot_num = $1 WHERE id = $2`, NextSlotNum, ParkingLotID); err != nil {
 		return nil, err
 	}
-	row = r.db.QueryRowContext(ctx, `SELECT slot_num, car_reg, car_colour FROM parks WHERE parking_lot_id = $1)`, ParkingLotID)
+	row = r.db.QueryRowContext(ctx, `SELECT slot_num, car_reg, car_colour FROM parks WHERE parking_lot_id = $1`, ParkingLotID)
 	if err := row.Scan(&p.SlotNum, &p.CarReg, &p.CarColour); err != nil {
 		return nil, err
 	}
@@ -116,13 +116,13 @@ func (r *postgresRepository) PostUnpark(ctx context.Context, slotnum uint32) err
 }
 
 func (r *postgresRepository) GetParks(ctx context.Context) ([]Park, error) {
-	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
+	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	var ParkingLotID uint32
 	if err := row.Scan(ParkingLotID); err != nil {
 		return nil, err
 	}
 
-	rows, err := r.db.QueryContext(ctx, `SELECT slot_num, car_reg, car_colour FROM parks WHERE parking_lot_id = $1 ORDER BY slot_num ASC)`, ParkingLotID)
+	rows, err := r.db.QueryContext(ctx, `SELECT slot_num, car_reg, car_colour FROM parks WHERE parking_lot_id = $1 ORDER BY slot_num ASC`, ParkingLotID)
 	if err != nil {
 		return nil, err
 	}
@@ -140,13 +140,13 @@ func (r *postgresRepository) GetParks(ctx context.Context) ([]Park, error) {
 }
 
 func (r *postgresRepository) GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error) {
-	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
+	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	var ParkingLotID uint32
 	if err := row.Scan(ParkingLotID); err != nil {
 		return nil, err
 	}
 
-	rows, err := r.db.QueryContext(ctx, `SELECT car_reg FROM parks WHERE parking_lot_id = $1 and car_colour = $2 ORDER BY slot_num ASC)`, ParkingLotID, carcolour)
+	rows, err := r.db.QueryContext(ctx, `SELECT car_reg FROM parks WHERE parking_lot_id = $1 and car_colour = $2 ORDER BY slot_num ASC`, ParkingLotID, carcolour)
 	if err != nil {
 		return nil, err
 	}
@@ -164,13 +164,13 @@ func (r *postgresRepository) GetCarRegsByColour(ctx context.Context, carcolour s
 }
 
 func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error) {
-	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
+	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	var ParkingLotID uint32
 	if err := row.Scan(ParkingLotID); err != nil {
 		return nil, err
 	}
 
-	rows, err := r.db.QueryContext(ctx, `SELECT slot_num FROM parks WHERE parking_lot_id = $1 and car_colour = $2 ORDER BY slot_num ASC)`, ParkingLotID, carcolour)
+	rows, err := r.db.QueryContext(ctx, `SELECT slot_num FROM parks WHERE parking_lot_id = $1 and car_colour = $2 ORDER BY slot_num ASC`, ParkingLotID, carcolour)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +189,7 @@ func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour str
 
 func (r *postgresRepository) GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error) {
 	slot := &Slot{}
-	row := r.db.QueryRowContext(ctx, `SELECT slot_num FROM parks WHERE car_reg = $1)`, carreg)
+	row := r.db.QueryRowContext(ctx, `SELECT slot_num FROM parks WHERE car_reg = $1`, carreg)
 
 	if err := row.Scan(&slot.SlotNum); err != nil {
 		return nil, err

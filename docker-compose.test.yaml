@@ -4,7 +4,7 @@ services:
   parking_db:
     build:
       context: ./parking/up
-      dockerfile: ./db.test.dockerfile
+      dockerfile: ./db.dockerfile
     environment:
       POSTGRES_DB: parking_test
       POSTGRES_USER: parking
