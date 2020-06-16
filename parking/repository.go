@@ -3,13 +3,8 @@ package parking
 import (
 	"context"
 	"database/sql"
-	"errors"
 
 	_ "github.com/lib/pq"
-)
-
-var (
-	ErrParkingFull = errors.New("parking is full")
 )
 
 type Repository interface {
@@ -50,7 +45,7 @@ func (r *postgresRepository) CreateLot(ctx context.Context, MaxSlotsCount uint64
 
 func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error) {
 	p := &Park{}
-
+	//select recent created parking lot
 	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
 	var ParkingLotID uint64
 	var MaxSlotsCount uint64
