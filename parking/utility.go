@@ -7,7 +7,7 @@ import (
 
 type Func func(int) error
 
-func find(slice []uint64, val uint64) (int, bool) {
+func find(slice []uint32, val uint32) (int, bool) {
 	for i, item := range slice {
 		if item == val {
 			return i, true

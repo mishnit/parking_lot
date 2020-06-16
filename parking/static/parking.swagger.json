@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "parking",
-    "version": "1.0"
+    "version": "v1.0"
   },
   "schemes": [
     "http"
@@ -194,8 +194,8 @@
       "type": "object",
       "properties": {
         "MaxSlotsCount": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -233,8 +233,8 @@
       "type": "object",
       "properties": {
         "SlotNum": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -253,8 +253,8 @@
       "type": "object",
       "properties": {
         "SlotNum": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int64"
         },
         "CarReg": {
           "type": "string"
@@ -287,8 +287,8 @@
       "type": "object",
       "properties": {
         "SlotNum": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -304,8 +304,8 @@
       "type": "object",
       "properties": {
         "SlotNum": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int64"
         }
       }
     }

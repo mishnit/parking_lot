@@ -3,13 +3,13 @@ package protobuf;
 import "google/api/annotations.proto";
 
 message Park {
-  uint64 SlotNum = 1;
+  uint32 SlotNum = 1;
   string CarReg = 2;
   string CarColour = 3;
 }
 
 message Slot {
-  uint64 SlotNum = 1;
+  uint32 SlotNum = 1;
 }
 
 message Car {
@@ -17,7 +17,7 @@ message Car {
 }
 
 message CreateLotRequest {
-  uint64 MaxSlotsCount = 1;
+  uint32 MaxSlotsCount = 1;
 }
 
 message CreateLotResponse {
@@ -34,7 +34,7 @@ message PostParkResponse {
 }
 
 message PostUnparkRequest {
-  uint64 SlotNum = 1;
+  uint32 SlotNum = 1;
 }
 
 message PostUnparkResponse {
@@ -69,7 +69,7 @@ message GetSlotByCarRegRequest {
 }
 
 message GetSlotByCarRegResponse {
-  uint64 SlotNum = 1;
+  uint32 SlotNum = 1;
 }
 
 service ParkingService {

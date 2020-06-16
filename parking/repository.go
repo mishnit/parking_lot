@@ -9,9 +9,9 @@ import (
 
 type Repository interface {
 	Close()
-	CreateLot(ctx context.Context, maxslotscount uint64) error
+	CreateLot(ctx context.Context, maxslotscount uint32) error
 	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
-	PostUnpark(ctx context.Context, slotnum uint64) error
+	PostUnpark(ctx context.Context, slotnum uint32) error
 	GetParks(ctx context.Context) ([]Park, error)
 	GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error)
 	GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error)
@@ -38,7 +38,7 @@ func (r *postgresRepository) Close() {
 	r.db.Close()
 }
 
-func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint64) error {
+func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint32) error {
 	_, err := r.db.ExecContext(ctx, `INSERT INTO parking_lots(max_slots_count) VALUES($1)`, maxslotscount)
 	return err
 }
@@ -47,10 +47,10 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 	p := &Park{}
 	//select recent created parking lot
 	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
-	var ParkingLotID uint64
-	var MaxSlotsCount uint64
-	var UsedSlotsCount uint64
-	var NextSlotNum uint64
+	var ParkingLotID uint32
+	var MaxSlotsCount uint32
+	var UsedSlotsCount uint32
+	var NextSlotNum uint32
 	if err := row.Scan(ParkingLotID, MaxSlotsCount, UsedSlotsCount, NextSlotNum); err != nil {
 		return nil, err
 	}
@@ -80,16 +80,16 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 	}
 	defer rows.Close()
 
-	slots_occupied := make([]uint64, 0, checkCount(rows))
+	slots_occupied := make([]uint32, 0, checkCount(rows))
 	for rows.Next() {
-		var slot uint64
+		var slot uint32
 		if err = rows.Scan(&slot); err != nil {
 			return nil, err
 		}
 		slots_occupied = append(slots_occupied, slot)
 	}
 
-	var i uint64
+	var i uint32
 	i = 0
 	for i < MaxSlotsCount {
 		_, found := find(slots_occupied, i)
@@ -110,14 +110,14 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 	return p, nil
 }
 
-func (r *postgresRepository) PostUnpark(ctx context.Context, slotnum uint64) error {
+func (r *postgresRepository) PostUnpark(ctx context.Context, slotnum uint32) error {
 	_, err := r.db.ExecContext(ctx, "DELETE FROM parks WHERE slot_num = $1", slotnum)
 	return err
 }
 
 func (r *postgresRepository) GetParks(ctx context.Context) ([]Park, error) {
 	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
-	var ParkingLotID uint64
+	var ParkingLotID uint32
 	if err := row.Scan(ParkingLotID); err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func (r *postgresRepository) GetParks(ctx context.Context) ([]Park, error) {
 
 func (r *postgresRepository) GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error) {
 	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
-	var ParkingLotID uint64
+	var ParkingLotID uint32
 	if err := row.Scan(ParkingLotID); err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (r *postgresRepository) GetCarRegsByColour(ctx context.Context, carcolour s
 
 func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error) {
 	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1)`)
-	var ParkingLotID uint64
+	var ParkingLotID uint32
 	if err := row.Scan(ParkingLotID); err != nil {
 		return nil, err
 	}

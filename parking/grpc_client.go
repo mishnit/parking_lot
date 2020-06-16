@@ -27,7 +27,7 @@ func (c *Client) Close() {
 	c.conn.Close()
 }
 
-func (c *Client) CreateLot(ctx context.Context, maxslotscount uint64) (string, error) {
+func (c *Client) CreateLot(ctx context.Context, maxslotscount uint32) (string, error) {
 	r, err := c.service.CreateLot(
 		ctx,
 		&pb.CreateLotRequest{MaxSlotsCount: maxslotscount},
@@ -52,7 +52,7 @@ func (c *Client) PostPark(ctx context.Context, carreg string, carcolour string) 
 	return park, nil
 }
 
-func (c *Client) PostUnpark(ctx context.Context, slotnum uint64) (string, error) {
+func (c *Client) PostUnpark(ctx context.Context, slotnum uint32) (string, error) {
 	r, err := c.service.PostUnpark(
 		ctx,
 		&pb.PostUnparkRequest{SlotNum: slotnum},

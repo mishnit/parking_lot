@@ -10,9 +10,9 @@ var (
 )
 
 type Service interface {
-	CreateLot(ctx context.Context, maxslotscount uint64) error
+	CreateLot(ctx context.Context, maxslotscount uint32) error
 	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
-	PostUnpark(ctx context.Context, slotnum uint64) error
+	PostUnpark(ctx context.Context, slotnum uint32) error
 	GetParks(ctx context.Context) ([]Park, error)
 	GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error)
 	GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error)
@@ -20,13 +20,13 @@ type Service interface {
 }
 
 type Park struct {
-	SlotNum   uint64 `json:"SlotNum"`
+	SlotNum   uint32 `json:"SlotNum"`
 	CarReg    string `json:"CarReg"`
 	CarColour string `json:"CarColour"`
 }
 
 type Slot struct {
-	SlotNum uint64 `json:"SlotNum"`
+	SlotNum uint32 `json:"SlotNum"`
 }
 
 type Car struct {
@@ -41,7 +41,7 @@ func NewService(r Repository) Service {
 	return &ParkingService{r}
 }
 
-func (s *ParkingService) CreateLot(ctx context.Context, maxslotscount uint64) error {
+func (s *ParkingService) CreateLot(ctx context.Context, maxslotscount uint32) error {
 	err := s.repository.CreateLot(ctx, maxslotscount)
 	if err != nil {
 		return err
@@ -57,7 +57,7 @@ func (s *ParkingService) PostPark(ctx context.Context, carreg string, carcolour 
 	return park, nil
 }
 
-func (s *ParkingService) PostUnpark(ctx context.Context, slotnum uint64) error {
+func (s *ParkingService) PostUnpark(ctx context.Context, slotnum uint32) error {
 	err := s.repository.PostUnpark(ctx, slotnum)
 	if err != nil {
 		return err
