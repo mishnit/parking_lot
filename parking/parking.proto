@@ -4,35 +4,25 @@ import "google/api/annotations.proto";
 
 message Park {
   uint64 SlotNum = 1;
-  string CarNum = 2;
+  string CarReg = 2;
   string CarColor = 3;
 }
 
-message Registration  {
-  string CarNum = 1;
-}
-
-message Slot  {
-  uint64 SlotNum = 1;
-}
-
-message PostMaxSlotRequest {
+message CreateLotRequest {
   uint64 MaxNum = 1;
 }
 
-message PostMaxSlotResponse {
-  uint64 MaxNum = 1;
-  string status = 2;
+message CreateLotResponse {
+  string status = 1;
 }
 
 message PostParkRequest {
-  string CarNum = 1;
+  string CarReg = 1;
   string CarColor = 2;
 }
 
 message PostParkResponse {
   uint64 SlotNum = 1;
-  string status = 2;
 }
 
 message PostUnparkRequest {
@@ -40,46 +30,45 @@ message PostUnparkRequest {
 }
 
 message PostUnparkResponse {
-  uint64 SlotNum = 1;
-  string status = 2;
+  string status = 1;
 }
 
-message GetStatusRequest{
+message GetParksRequest{
 }
 
-message GetStatusResponse{
+message GetParksResponse{
   repeated Park Parks = 1;
 }
 
-message GetRegistrationRequest {
+message GetCarRegsByColorRequest {
   string CarColor = 1;
 }
 
-message GetRegistrationResponse {
-  repeated Registration Registrations = 1;
+message GetCarRegsByColorResponse {
+  repeated CarReg CarRegs = 1;
 }
 
-message GetSlotCarRequest {
+message GetSlotsByColorRequest {
   string CarColor = 1;
 }
 
-message GetSlotCarResponse {
-  repeated Slot Slots = 1;
+message GetSlotsByColorResponse {
+  repeated SlotNum SlotNums = 1;
 }
 
-message GetSlotRegRequest {
-  string CarNum = 1;
+message GetSlotByCarRegRequest {
+  string CarReg = 1;
 }
 
-message GetSlotRegResponse {
+message GetSlotByCarRegResponse {
   uint64 SlotNum = 1;
 }
 
 service ParkingService {
 
-  rpc PostMaxSlot (PostMaxSlotRequest) returns (PostMaxSlotResponse) {
+  rpc CreateLot (CreateLotRequest) returns (CreateLotResponse) {
   option (google.api.http) = {
-      post: "/api/postmaxslot"
+      post: "/api/createlot"
       body: "*"
     };
   }
@@ -98,9 +87,27 @@ service ParkingService {
     };
   }
 
-  rpc GetStatus (GetStatusRequest) returns (GetStatusResponse) {
+  rpc GetParks (GetParksRequest) returns (GetParksResponse) {
   option(google.api.http) = {
-      get: "/api/getdecodedpolyline/{OpId}/{ServiceId}"
+      get: "/api/getparks"
+    };
+  }
+
+  rpc GetCarRegsByColor (GetCarRegsByColorRequest) returns (GetCarRegsByColorResponse) {
+  option(google.api.http) = {
+      get: "/api/getcarregs/color/{CarColor}"
+    };
+  }
+
+  rpc GetSlotsByColor (GetSlotsByColorRequest) returns (GetSlotsByColorResponse) {
+  option(google.api.http) = {
+      get: "/api/getslots/color/{CarColor}"
+    };
+  }
+
+  rpc GetSlotByCarReg (GetSlotByCarRegRequest) returns (GetSlotByCarRegResponse) {
+  option(google.api.http) = {
+      get: "/api/getslot/reg/{CarReg}"
     };
   }
 }
