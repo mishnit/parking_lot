@@ -5,24 +5,25 @@ import "google/api/annotations.proto";
 message Park {
   uint64 SlotNum = 1;
   string CarReg = 2;
-  string CarColor = 3;
+  string CarColour = 3;
 }
 
 message CreateLotRequest {
-  uint64 MaxNum = 1;
+  uint64 MaxSlotsCount = 1;
 }
 
 message CreateLotResponse {
-  string status = 1;
+  uint64 MaxSlotsCount = 1;
+  string status = 2;
 }
 
 message PostParkRequest {
   string CarReg = 1;
-  string CarColor = 2;
+  string CarColour = 2;
 }
 
 message PostParkResponse {
-  uint64 SlotNum = 1;
+  Park Park = 1;
 }
 
 message PostUnparkRequest {
@@ -40,19 +41,19 @@ message GetParksResponse{
   repeated Park Parks = 1;
 }
 
-message GetCarRegsByColorRequest {
-  string CarColor = 1;
+message GetCarRegsByColourRequest {
+  string CarColour = 1;
 }
 
-message GetCarRegsByColorResponse {
+message GetCarRegsByColourResponse {
   repeated CarReg CarRegs = 1;
 }
 
-message GetSlotsByColorRequest {
-  string CarColor = 1;
+message GetSlotsByColourRequest {
+  string CarColour = 1;
 }
 
-message GetSlotsByColorResponse {
+message GetSlotsByColourResponse {
   repeated SlotNum SlotNums = 1;
 }
 
@@ -93,15 +94,15 @@ service ParkingService {
     };
   }
 
-  rpc GetCarRegsByColor (GetCarRegsByColorRequest) returns (GetCarRegsByColorResponse) {
+  rpc GetCarRegsByColour (GetCarRegsByColourRequest) returns (GetCarRegsByColourResponse) {
   option(google.api.http) = {
-      get: "/api/getcarregs/color/{CarColor}"
+      get: "/api/getcarregs/colour/{CarColour}"
     };
   }
 
-  rpc GetSlotsByColor (GetSlotsByColorRequest) returns (GetSlotsByColorResponse) {
+  rpc GetSlotsByColour (GetSlotsByColourRequest) returns (GetSlotsByColourResponse) {
   option(google.api.http) = {
-      get: "/api/getslots/color/{CarColor}"
+      get: "/api/getslots/colour/{CarColour}"
     };
   }
 
