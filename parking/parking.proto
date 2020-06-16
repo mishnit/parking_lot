@@ -1,0 +1,106 @@
+syntax = "proto3";
+package pb;
+import "google/api/annotations.proto";
+
+message Park {
+  uint64 SlotNum = 1;
+  string CarNum = 2;
+  string CarColor = 3;
+}
+
+message Registration  {
+  string CarNum = 1;
+}
+
+message Slot  {
+  uint64 SlotNum = 1;
+}
+
+message PostMaxSlotRequest {
+  uint64 MaxNum = 1;
+}
+
+message PostMaxSlotResponse {
+  uint64 MaxNum = 1;
+  string status = 2;
+}
+
+message PostParkRequest {
+  string CarNum = 1;
+  string CarColor = 2;
+}
+
+message PostParkResponse {
+  uint64 SlotNum = 1;
+  string status = 2;
+}
+
+message PostUnparkRequest {
+  uint64 SlotNum = 1;
+}
+
+message PostUnparkResponse {
+  uint64 SlotNum = 1;
+  string status = 2;
+}
+
+message GetStatusRequest{
+}
+
+message GetStatusResponse{
+  repeated Park Parks = 1;
+}
+
+message GetRegistrationRequest {
+  string CarColor = 1;
+}
+
+message GetRegistrationResponse {
+  repeated Registration Registrations = 1;
+}
+
+message GetSlotCarRequest {
+  string CarColor = 1;
+}
+
+message GetSlotCarResponse {
+  repeated Slot Slots = 1;
+}
+
+message GetSlotRegRequest {
+  string CarNum = 1;
+}
+
+message GetSlotRegResponse {
+  uint64 SlotNum = 1;
+}
+
+service ParkingService {
+
+  rpc PostMaxSlot (PostMaxSlotRequest) returns (PostMaxSlotResponse) {
+  option (google.api.http) = {
+      post: "/api/postmaxslot"
+      body: "*"
+    };
+  }
+
+  rpc PostPark (PostParkRequest) returns (PostParkResponse) {
+  option (google.api.http) = {
+      post: "/api/postpark"
+      body: "*"
+    };
+  }
+
+  rpc PostUnpark (PostUnparkRequest) returns (PostUnparkResponse) {
+  option (google.api.http) = {
+      post: "/api/postunpark"
+      body: "*"
+    };
+  }
+
+  rpc GetStatus (GetStatusRequest) returns (GetStatusResponse) {
+  option(google.api.http) = {
+      get: "/api/getdecodedpolyline/{OpId}/{ServiceId}"
+    };
+  }
+}
