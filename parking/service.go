@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	ErrParkingFull = errors.New("parking is full")
+	ErrParkingFull = errors.New("Parking is already full")
 )
 
 type Service interface {
