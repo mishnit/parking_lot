@@ -1,28 +1,32 @@
-Install GO on Ubuntu:
+Parking lot - A GRPC Microservice with REST and Command line interface (including test cases)
+
+DEVELOPMENT REQUIREMENTS:
 ```
-$ sudo apt update
-$ wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
-$ sudo tar -xvf go1.13.1.linux-amd64.tar.gz
-$ sudo mv go /usr/local
-$ sudo vi ~/.profile
-(paste the below line at end, save and exit)
->> export GOROOT=/usr/local/go
->> export GOPATH=$HOME/go
->> export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-$ source ~/.profile
-$ go version [to check golang version]
-$ go env [to check golang internal env variables]
+go version go1.13.1 linux/amd64
+docker-compose version 1.21.2
+Docker version 19.03.2
 ```
 
-Install Docker and Docker Compose on Ubuntu:
+TEST (docker):
 ```
-$ sudo apt install apt-transport-https ca-certificates curl software-properties-common
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-$ sudo apt update
-$ apt-cache policy docker-ce
-$ sudo apt install docker-ce
-$ docker --version
-$ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-$ sudo chmod +x /usr/local/bin/docker-compose
-$ docker-compose --version
+$ ./bin/setup
+```
+
+RUN (docker):
+```
+$ ./bin/parking_lot
+```
+
+REST/CURL Endpoints
+```
+http://localhost:8000/swagger-parking/
+```
+
+TODO: Two CLI interfaces for grpc (first for shell launch and second with file input as argument)
+TODO: create test files with seed data (positive and Negative tests remaining)
+TODO: update parking_lot file for cmd application
+
+
+send tarball zip and no code public being made
+
+Check this : https://github.com/george-e-shaw-iv/integration-tests-example/blob/master/cmd/listd/tests/item_test.go
