@@ -1,11 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "parking",
-    "version": "v1.0"
+    "title": "parking.proto",
+    "version": "version not set"
   },
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -182,14 +183,6 @@
     }
   },
   "definitions": {
-    "protobufCar": {
-      "type": "object",
-      "properties": {
-        "CarReg": {
-          "type": "string"
-        }
-      }
-    },
     "protobufCreateLotRequest": {
       "type": "object",
       "properties": {
@@ -213,7 +206,7 @@
         "Cars": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/protobufCar"
+            "type": "string"
           }
         }
       }
@@ -244,7 +237,8 @@
         "Slots": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/protobufSlot"
+            "type": "string",
+            "format": "uint64"
           }
         }
       }
@@ -297,15 +291,6 @@
       "properties": {
         "status": {
           "type": "string"
-        }
-      }
-    },
-    "protobufSlot": {
-      "type": "object",
-      "properties": {
-        "SlotNum": {
-          "type": "integer",
-          "format": "int64"
         }
       }
     }

@@ -6,7 +6,9 @@ import (
 )
 
 var (
-	ErrParkingFull = errors.New("Parking is already full")
+	ErrParkingFull  = errors.New("Lot is Full!")
+	ErrParkingEmpty = errors.New("Lot is Empty!")
+	ErrParking      = errors.New("Parking slot is already Empty!")
 )
 
 type Service interface {
@@ -14,8 +16,8 @@ type Service interface {
 	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
 	PostUnpark(ctx context.Context, slotnum uint32) error
 	GetParks(ctx context.Context) ([]Park, error)
-	GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error)
-	GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error)
+	GetCarRegsByColour(ctx context.Context, carcolour string) ([]string, error)
+	GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error)
 	GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error)
 }
 
@@ -73,7 +75,7 @@ func (s *ParkingService) GetParks(ctx context.Context) ([]Park, error) {
 	return parks, nil
 }
 
-func (s *ParkingService) GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error) {
+func (s *ParkingService) GetCarRegsByColour(ctx context.Context, carcolour string) ([]string, error) {
 	cars, err := s.repository.GetCarRegsByColour(ctx, carcolour)
 	if err != nil {
 		return nil, err
@@ -81,7 +83,7 @@ func (s *ParkingService) GetCarRegsByColour(ctx context.Context, carcolour strin
 	return cars, nil
 }
 
-func (s *ParkingService) GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error) {
+func (s *ParkingService) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error) {
 	slots, err := s.repository.GetSlotsByColour(ctx, carcolour)
 	if err != nil {
 		return nil, err

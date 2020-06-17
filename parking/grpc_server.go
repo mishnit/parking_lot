@@ -117,14 +117,11 @@ func (s *grpcServer) GetCarRegsByColour(ctx context.Context, p *pb.GetCarRegsByC
 		return nil, err
 	}
 
-	cars := []*pb.Car{}
+	cars := []string{}
 	for _, a := range r {
 		cars = append(
 			cars,
-			&pb.Car{
-				CarReg: a.CarReg,
-			},
-		)
+			a)
 	}
 
 	return &pb.GetCarRegsByColourResponse{Cars: cars}, nil
@@ -137,14 +134,10 @@ func (s *grpcServer) GetSlotsByColour(ctx context.Context, p *pb.GetSlotsByColou
 		return nil, err
 	}
 
-	slots := []*pb.Slot{}
+	slots := []uint64{}
 	for _, a := range r {
 		slots = append(
-			slots,
-			&pb.Slot{
-				SlotNum: a.SlotNum,
-			},
-		)
+			slots, a)
 	}
 
 	return &pb.GetSlotsByColourResponse{Slots: slots}, nil

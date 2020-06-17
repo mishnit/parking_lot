@@ -53,7 +53,7 @@ message GetCarRegsByColourRequest {
 }
 
 message GetCarRegsByColourResponse {
-  repeated Car Cars = 1;
+  repeated string Cars = 1;
 }
 
 message GetSlotsByColourRequest {
@@ -61,7 +61,7 @@ message GetSlotsByColourRequest {
 }
 
 message GetSlotsByColourResponse {
-  repeated Slot Slots = 1;
+  repeated uint64 Slots = 1;
 }
 
 message GetSlotByCarRegRequest {

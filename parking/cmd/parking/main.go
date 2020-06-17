@@ -23,8 +23,6 @@ func main() {
 
 	var r parking.Repository
 	p.ForeverSleep(2*time.Second, func(_ int) (err error) {
-		//DebugDatabaseURL := fmt.Sprintf("postgres://%v:%v@%v/%v?sslmode=disable", "user", "pass", "localhost", "dbname")
-		//DEBUG: pass DebugDatabaseURL rather cfg.DatabaseURL
 		r, err = parking.NewPostgresRepository(cfg.DatabaseURL)
 		if err != nil {
 			log.Println(err)

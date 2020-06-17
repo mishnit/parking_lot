@@ -7,28 +7,28 @@ CREATE TABLE IF NOT EXISTS parking_lots (
 );
 
 CREATE TABLE IF NOT EXISTS parks (
-  parking_lot_id INT REFERENCES parking_lots,
-  slot_num INT NOT NULL UNIQUE,
+  parking_lot_id INT NOT NULL REFERENCES parking_lots,
+  slot_num INT NOT NULL,
   car_reg VARCHAR(13) NOT NULL UNIQUE,
   car_colour VARCHAR NOT NULL,
   PRIMARY KEY (parking_lot_id, slot_num)
 );
 
-CREATE INDEX IF NOT EXISTS lot_slot ON parks (parking_lot_id, slot_num);
+CREATE INDEX IF NOT EXISTS cars ON parks (car_reg);
 
-CREATE FUNCTION inc_used_slot() RETURNS TRIGGER
+CREATE OR REPLACE FUNCTION inc_used_slot() RETURNS TRIGGER
 AS $_$
 BEGIN
-UPDATE parking_lots SET used_slots_count = used_slots_count + 1 WHERE id = NEW.park_lot_id;
+UPDATE parking_lots SET used_slots_count = used_slots_count + 1 WHERE id = NEW.parking_lot_id;
 RETURN NEW;
 END $_$
 LANGUAGE 'plpgsql';
 
-CREATE FUNCTION dec_used_slot() RETURNS TRIGGER
+CREATE OR REPLACE FUNCTION dec_used_slot() RETURNS TRIGGER
 AS $_$
 BEGIN
-UPDATE parking_lots SET used_slots_count = used_slots_count - 1  WHERE id = OLD.park_lot_id;
-RETURN NEW;
+UPDATE parking_lots SET used_slots_count = used_slots_count - 1  WHERE id = OLD.parking_lot_id;
+RETURN OLD;
 END $_$
 LANGUAGE 'plpgsql';
 

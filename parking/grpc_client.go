@@ -84,7 +84,7 @@ func (c *Client) GetParks(ctx context.Context) ([]Park, error) {
 	return parks, nil
 }
 
-func (c *Client) GetCarRegsByColour(ctx context.Context, carcolour string) ([]Car, error) {
+func (c *Client) GetCarRegsByColour(ctx context.Context, carcolour string) ([]string, error) {
 	r, err := c.service.GetCarRegsByColour(
 		ctx,
 		&pb.GetCarRegsByColourRequest{CarColour: carcolour},
@@ -93,16 +93,15 @@ func (c *Client) GetCarRegsByColour(ctx context.Context, carcolour string) ([]Ca
 		log.Println(err)
 		return nil, err
 	}
-	cars := []Car{}
+	cars := []string{}
 	for _, a := range r.Cars {
-		cars = append(cars, Car{
-			CarReg: a.CarReg,
-		})
+		cars = append(cars, a)
 	}
+
 	return cars, nil
 }
 
-func (c *Client) GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot, error) {
+func (c *Client) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error) {
 	r, err := c.service.GetSlotsByColour(
 		ctx,
 		&pb.GetSlotsByColourRequest{CarColour: carcolour},
@@ -111,11 +110,9 @@ func (c *Client) GetSlotsByColour(ctx context.Context, carcolour string) ([]Slot
 		log.Println(err)
 		return nil, err
 	}
-	slots := []Slot{}
+	slots := []uint64{}
 	for _, a := range r.Slots {
-		slots = append(slots, Slot{
-			SlotNum: a.SlotNum,
-		})
+		slots = append(slots, a)
 	}
 	return slots, nil
 }
