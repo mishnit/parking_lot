@@ -3,12 +3,15 @@ package parking
 import (
 	"context"
 	"errors"
+	"regexp"
 )
 
 var (
-	ErrParkingFull  = errors.New("Lot is Full!")
-	ErrParkingEmpty = errors.New("Lot is Empty!")
-	ErrParking      = errors.New("Parking slot is already Empty!")
+	ErrParkingFull      = errors.New("Lot is Full!")
+	ErrParkingEmpty     = errors.New("Lot is Empty!")
+	ErrParking          = errors.New("Parking slot is Empty!")
+	regexCarNumber      = regexp.MustCompile(`^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$`)
+	ErrInvalidCarNumber = errors.New("Invalid Car Number Plate!")
 )
 
 type Service interface {
@@ -52,6 +55,9 @@ func (s *ParkingService) CreateLot(ctx context.Context, maxslotscount uint32) er
 }
 
 func (s *ParkingService) PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error) {
+	if !regexCarNumber.MatchString(carreg) {
+		return nil, ErrInvalidCarNumber
+	}
 	park, err := s.repository.PostPark(ctx, carreg, carcolour)
 	if err != nil {
 		return nil, err

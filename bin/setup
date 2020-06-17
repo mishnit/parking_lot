@@ -1,0 +1,4 @@
+#!/bin/bash
+
+make mod
+./bin/run_functional_tests

@@ -91,6 +91,8 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 
 	//log.Println("repo debug: PostPark-> after nextslotnum: ", NextSlotNum)
 
+	/// transaction begin
+
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
 		log.Fatal(err)
@@ -112,6 +114,8 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	/// transaction end
 
 	row = r.db.QueryRowContext(ctx, `SELECT slot_num, car_reg, car_colour FROM parks WHERE parking_lot_id = $1 and slot_num = $2`, ParkingLotID, CurrSlotNum)
 	if err := row.Scan(&p.SlotNum, &p.CarReg, &p.CarColour); err != nil {

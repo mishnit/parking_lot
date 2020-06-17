@@ -45,6 +45,6 @@ func main() {
 		log.Fatal(parking.ListenREST(s, 8080, 5566))
 		wg.Done()
 	}()
-	log.Println("REST Listening on port 8080...")
+	log.Println("REST talking to GRPC and Listening on port 8080...")
 	wg.Wait()
 }

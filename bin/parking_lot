@@ -1,0 +1,12 @@
+#!/bin/bash
+
+make down
+make run
+
+# if [ -e main ]
+# then
+#     ./main ${1}
+# else
+#     ./setup
+#     ./main ${1}
+# fi
