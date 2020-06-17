@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -64,11 +65,6 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 
 	//log.Println("repo debug: PostPark-> before nextslotnum: ", CurrSlotNum)
 
-	if _, err := r.db.ExecContext(ctx, `INSERT INTO parks(parking_lot_id, slot_num, car_reg, car_colour) VALUES($1, $2, $3, $4)`, ParkingLotID, CurrSlotNum, carreg, carcolour); err != nil {
-		//log.Println("repo debug: PostPark-> insert park")
-		return nil, err
-	}
-
 	// every insert will update used_slots_count and used_slots
 	// now we need to update next available slot
 
@@ -89,13 +85,32 @@ func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcol
 		UsedSlots = append(UsedSlots, UsedSlot)
 	}
 
+	UsedSlots = append(UsedSlots, CurrSlotNum) //precompute
+
 	NextSlotNum := nextslot(MaxSlotsCount, UsedSlots)
 
 	//log.Println("repo debug: PostPark-> after nextslotnum: ", NextSlotNum)
 
-	if _, err := r.db.ExecContext(ctx, `UPDATE parking_lots SET next_slot_num = $1 WHERE id = $2`, NextSlotNum, ParkingLotID); err != nil {
-		//log.Println("repo debug: PostPark-> update next_slot_num")
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if _, err := tx.ExecContext(ctx, `INSERT INTO parks(parking_lot_id, slot_num, car_reg, car_colour) VALUES($1, $2, $3, $4)`, ParkingLotID, CurrSlotNum, carreg, carcolour); err != nil {
+		//log.Println("repo debug: PostPark-> insert park")
+		tx.Rollback()
 		return nil, err
+	}
+
+	if _, err := tx.ExecContext(ctx, `UPDATE parking_lots SET next_slot_num = $1 WHERE id = $2`, NextSlotNum, ParkingLotID); err != nil {
+		//log.Println("repo debug: PostPark-> update next_slot_num")
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	row = r.db.QueryRowContext(ctx, `SELECT slot_num, car_reg, car_colour FROM parks WHERE parking_lot_id = $1 and slot_num = $2`, ParkingLotID, CurrSlotNum)
