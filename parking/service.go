@@ -10,19 +10,9 @@ var (
 	ErrParkingFull      = errors.New("Lot is Full!")
 	ErrParkingEmpty     = errors.New("Lot is Empty!")
 	ErrParking          = errors.New("Parking slot is Empty!")
-	regexCarNumber      = regexp.MustCompile(`^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$`)
+	regexCarNumber      = regexp.MustCompile(`^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{4}$`)
 	ErrInvalidCarNumber = errors.New("Invalid Car Number Plate!")
 )
-
-type Service interface {
-	CreateLot(ctx context.Context, maxslotscount uint32) error
-	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
-	PostUnpark(ctx context.Context, slotnum uint32) error
-	GetParks(ctx context.Context) ([]Park, error)
-	GetCarRegsByColour(ctx context.Context, carcolour string) ([]string, error)
-	GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error)
-	GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error)
-}
 
 type Park struct {
 	SlotNum   uint32 `json:"SlotNum"`
@@ -36,6 +26,16 @@ type Slot struct {
 
 type Car struct {
 	CarReg string `json:"CarReg"`
+}
+
+type Service interface {
+	CreateLot(ctx context.Context, maxslotscount uint32) error
+	PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error)
+	PostUnpark(ctx context.Context, slotnum uint32) error
+	GetParks(ctx context.Context) ([]Park, error)
+	GetCarRegsByColour(ctx context.Context, carcolour string) ([]string, error)
+	GetSlotsByColour(ctx context.Context, carcolour string) ([]uint32, error)
+	GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error)
 }
 
 type ParkingService struct {
@@ -89,7 +89,7 @@ func (s *ParkingService) GetCarRegsByColour(ctx context.Context, carcolour strin
 	return cars, nil
 }
 
-func (s *ParkingService) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error) {
+func (s *ParkingService) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint32, error) {
 	slots, err := s.repository.GetSlotsByColour(ctx, carcolour)
 	if err != nil {
 		return nil, err

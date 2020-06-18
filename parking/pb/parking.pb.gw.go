@@ -643,19 +643,19 @@ func RegisterParkingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_ParkingService_CreateLot_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "createlot"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_CreateLot_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "createlot"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ParkingService_PostPark_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "postpark"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_PostPark_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "postpark"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ParkingService_PostUnpark_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "postunpark"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_PostUnpark_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "postunpark"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ParkingService_GetParks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "getparks"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_GetParks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "getparks"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ParkingService_GetCarRegsByColour_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "getcarregs", "colour", "CarColour"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_GetCarRegsByColour_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "getcarregs", "colour", "CarColour"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ParkingService_GetSlotsByColour_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "getslots", "colour", "CarColour"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_GetSlotsByColour_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "getslots", "colour", "CarColour"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ParkingService_GetSlotByCarReg_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "getslot", "reg", "CarReg"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ParkingService_GetSlotByCarReg_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "getslot", "reg", "CarReg"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

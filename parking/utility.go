@@ -2,6 +2,7 @@ package parking
 
 import (
 	"database/sql"
+	"strings"
 	"time"
 )
 
@@ -51,4 +52,11 @@ func nextslot(MaxSlotsCount uint32, UsedSlots []uint32) uint32 {
 		i = i + 1
 	}
 	return i
+}
+
+func trimSuffix(s, suffix string) string {
+	if strings.HasSuffix(s, suffix) {
+		s = s[:len(s)-len(suffix)]
+	}
+	return s
 }

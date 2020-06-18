@@ -21,7 +21,7 @@ message CreateLotRequest {
 }
 
 message CreateLotResponse {
-  string status = 1;
+  string Status = 1;
 }
 
 message PostParkRequest {
@@ -38,7 +38,7 @@ message PostUnparkRequest {
 }
 
 message PostUnparkResponse {
-  string status = 1;
+  string Status = 1;
 }
 
 message GetParksRequest{
@@ -61,7 +61,7 @@ message GetSlotsByColourRequest {
 }
 
 message GetSlotsByColourResponse {
-  repeated uint64 Slots = 1;
+  repeated uint32 Slots = 1;
 }
 
 message GetSlotByCarRegRequest {
@@ -76,46 +76,46 @@ service ParkingService {
 
   rpc CreateLot (CreateLotRequest) returns (CreateLotResponse) {
   option (google.api.http) = {
-      post: "/api/createlot"
+      post: "/api/v1/createlot"
       body: "*"
     };
   }
 
   rpc PostPark (PostParkRequest) returns (PostParkResponse) {
   option (google.api.http) = {
-      post: "/api/postpark"
+      post: "/api/v1/postpark"
       body: "*"
     };
   }
 
   rpc PostUnpark (PostUnparkRequest) returns (PostUnparkResponse) {
   option (google.api.http) = {
-      post: "/api/postunpark"
+      post: "/api/v1/postunpark"
       body: "*"
     };
   }
 
   rpc GetParks (GetParksRequest) returns (GetParksResponse) {
   option(google.api.http) = {
-      get: "/api/getparks"
+      get: "/api/v1/getparks"
     };
   }
 
   rpc GetCarRegsByColour (GetCarRegsByColourRequest) returns (GetCarRegsByColourResponse) {
   option(google.api.http) = {
-      get: "/api/getcarregs/colour/{CarColour}"
+      get: "/api/v1/getcarregs/colour/{CarColour}"
     };
   }
 
   rpc GetSlotsByColour (GetSlotsByColourRequest) returns (GetSlotsByColourResponse) {
   option(google.api.http) = {
-      get: "/api/getslots/colour/{CarColour}"
+      get: "/api/v1/getslots/colour/{CarColour}"
     };
   }
 
   rpc GetSlotByCarReg (GetSlotByCarRegRequest) returns (GetSlotByCarRegResponse) {
   option(google.api.http) = {
-      get: "/api/getslot/reg/{CarReg}"
+      get: "/api/v1/getslot/reg/{CarReg}"
     };
   }
 }

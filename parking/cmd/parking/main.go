@@ -39,12 +39,13 @@ func main() {
 		log.Fatal(parking.ListenGRPC(s, 5566))
 		wg.Done()
 	}()
-	log.Println("GRPC Listening on port 5566...")
+	log.Println("GRPC Server Listening on port 5566...")
 	wg.Add(1)
 	go func() {
 		log.Fatal(parking.ListenREST(s, 8080, 5566))
 		wg.Done()
 	}()
-	log.Println("REST talking to GRPC and Listening on port 8080...")
+	log.Println("REST Server connected to GRPC Server")
+	log.Println("Rest Server Listening on port 8080...")
 	wg.Wait()
 }

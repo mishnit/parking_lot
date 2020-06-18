@@ -1,12 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "parking.proto",
-    "version": "version not set"
+    "title": "Parking Lot",
+    "version": "v 1.4.2"
   },
   "schemes": [
-    "http",
-    "https"
+    "http"
   ],
   "consumes": [
     "application/json"
@@ -15,7 +14,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/createlot": {
+    "/api/v1/createlot": {
       "post": {
         "operationId": "CreateLot",
         "responses": {
@@ -41,7 +40,7 @@
         ]
       }
     },
-    "/api/getcarregs/colour/{CarColour}": {
+    "/api/v1/getcarregs/colour/{CarColour}": {
       "get": {
         "operationId": "GetCarRegsByColour",
         "responses": {
@@ -65,7 +64,7 @@
         ]
       }
     },
-    "/api/getparks": {
+    "/api/v1/getparks": {
       "get": {
         "operationId": "GetParks",
         "responses": {
@@ -81,7 +80,7 @@
         ]
       }
     },
-    "/api/getslot/reg/{CarReg}": {
+    "/api/v1/getslot/reg/{CarReg}": {
       "get": {
         "operationId": "GetSlotByCarReg",
         "responses": {
@@ -105,7 +104,7 @@
         ]
       }
     },
-    "/api/getslots/colour/{CarColour}": {
+    "/api/v1/getslots/colour/{CarColour}": {
       "get": {
         "operationId": "GetSlotsByColour",
         "responses": {
@@ -129,7 +128,7 @@
         ]
       }
     },
-    "/api/postpark": {
+    "/api/v1/postpark": {
       "post": {
         "operationId": "PostPark",
         "responses": {
@@ -155,7 +154,7 @@
         ]
       }
     },
-    "/api/postunpark": {
+    "/api/v1/postunpark": {
       "post": {
         "operationId": "PostUnpark",
         "responses": {
@@ -195,7 +194,7 @@
     "protobufCreateLotResponse": {
       "type": "object",
       "properties": {
-        "status": {
+        "Status": {
           "type": "string"
         }
       }
@@ -237,8 +236,8 @@
         "Slots": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uint64"
+            "type": "integer",
+            "format": "int64"
           }
         }
       }
@@ -289,7 +288,7 @@
     "protobufPostUnparkResponse": {
       "type": "object",
       "properties": {
-        "status": {
+        "Status": {
           "type": "string"
         }
       }

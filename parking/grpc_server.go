@@ -67,7 +67,7 @@ func (s *grpcServer) CreateLot(ctx context.Context, p *pb.CreateLotRequest) (*pb
 		log.Println(err)
 		return nil, err
 	}
-	return &pb.CreateLotResponse{Status: "201 created"}, nil
+	return &pb.CreateLotResponse{Status: "created"}, nil
 }
 
 func (s *grpcServer) PostPark(ctx context.Context, p *pb.PostParkRequest) (*pb.PostParkResponse, error) {
@@ -86,7 +86,7 @@ func (s *grpcServer) PostUnpark(ctx context.Context, p *pb.PostUnparkRequest) (*
 		log.Println(err)
 		return nil, err
 	}
-	return &pb.PostUnparkResponse{Status: "201 created"}, nil
+	return &pb.PostUnparkResponse{Status: "removed"}, nil
 }
 
 func (s *grpcServer) GetParks(ctx context.Context, p *pb.GetParksRequest) (*pb.GetParksResponse, error) {
@@ -134,7 +134,7 @@ func (s *grpcServer) GetSlotsByColour(ctx context.Context, p *pb.GetSlotsByColou
 		return nil, err
 	}
 
-	slots := []uint64{}
+	slots := []uint32{}
 	for _, a := range r {
 		slots = append(
 			slots, a)

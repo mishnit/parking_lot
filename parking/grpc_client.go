@@ -101,7 +101,7 @@ func (c *Client) GetCarRegsByColour(ctx context.Context, carcolour string) ([]st
 	return cars, nil
 }
 
-func (c *Client) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error) {
+func (c *Client) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint32, error) {
 	r, err := c.service.GetSlotsByColour(
 		ctx,
 		&pb.GetSlotsByColourRequest{CarColour: carcolour},
@@ -110,7 +110,7 @@ func (c *Client) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint
 		log.Println(err)
 		return nil, err
 	}
-	slots := []uint64{}
+	slots := []uint32{}
 	for _, a := range r.Slots {
 		slots = append(slots, a)
 	}

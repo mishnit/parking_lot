@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: ./parking/app.dockerfile
     ports:
-      - "8000:8080"
+      - "3569:8080"
     depends_on:
       - parking_db
     environment:

@@ -16,7 +16,7 @@ type Repository interface {
 	PostUnpark(ctx context.Context, slotnum uint32) error
 	GetParks(ctx context.Context) ([]Park, error)
 	GetCarRegsByColour(ctx context.Context, carcolour string) ([]string, error)
-	GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error)
+	GetSlotsByColour(ctx context.Context, carcolour string) ([]uint32, error)
 	GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error)
 }
 
@@ -241,7 +241,7 @@ func (r *postgresRepository) GetCarRegsByColour(ctx context.Context, carcolour s
 	return cars, nil
 }
 
-func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint64, error) {
+func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour string) ([]uint32, error) {
 	row := r.db.QueryRowContext(ctx, `SELECT id FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	var ParkingLotID uint32
 	if err := row.Scan(&ParkingLotID); err != nil {
@@ -256,9 +256,9 @@ func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour str
 	}
 	defer rows.Close()
 
-	slots := []uint64{}
+	slots := []uint32{}
 	for rows.Next() {
-		var SlotNum uint64
+		var SlotNum uint32
 		if err = rows.Scan(&SlotNum); err != nil {
 			//log.Println("repo debug: GetSlotsByColour-> scan slot")
 			return nil, err
