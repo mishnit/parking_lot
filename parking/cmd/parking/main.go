@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"parking_lot/parking"
-	p "parking_lot/parking"
 	"sync"
 	"time"
 
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	var r parking.Repository
-	p.ForeverSleep(2*time.Second, func(_ int) (err error) {
+	parking.ForeverSleep(2*time.Second, func(_ int) (err error) {
 		r, err = parking.NewPostgresRepository(cfg.DatabaseURL)
 		if err != nil {
 			log.Println(err)
