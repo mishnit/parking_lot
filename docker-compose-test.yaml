@@ -6,12 +6,12 @@ services:
       context: ./parking/up
       dockerfile: ./db.dockerfile
     environment:
-      POSTGRES_DB: parking_test
-      POSTGRES_USER: parking_test
+      POSTGRES_DB: parking
+      POSTGRES_USER: parking
       POSTGRES_PASSWORD: 123456
     restart: unless-stopped
 
-  parking:
+  parking_test:
     build:
       context: .
       dockerfile: ./parking/app.dockerfile.test
@@ -20,5 +20,5 @@ services:
     depends_on:
       - db_test
     environment:
-      DATABASE_URL: postgres://parking_test:123456@db_test/parking_test?sslmode=disable
+      DATABASE_URL: postgres://parking:123456@db_test/parking?sslmode=disable
     restart: on-failure
