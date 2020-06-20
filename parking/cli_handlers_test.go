@@ -58,4 +58,4 @@ func TestSlotNumberForRegistrationNumber(t *testing.T) {
 	}
 }
 
-// TODO: negative test cases
+// negative test cases

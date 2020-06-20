@@ -56,5 +56,6 @@ ErrInvalidCarNumber     Invalid Indian Car Number Plate Format!
 regexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{4}$
 ```
 
-TODO: update cli_handlers_test.go for positive and error code checks unit test cases
+TODO: cli_handlers_test.go works fine on localhost but not on docker
+TODO: update cli_handlers_test.go for positive, negative (error code checks) unit test cases
 TODO: send tarball zip and no code public being made
