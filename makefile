@@ -22,7 +22,5 @@ cli:
 	@mkdir -p build && \
 	cd build && \
 	go build -o parking_lot ../parking/commands && \
-	cp ../parking/scripts/start.sh . && \
-	cp ../parking/scripts/exit.sh . && \
 	chmod -R 777 . && \
 	cd ..
