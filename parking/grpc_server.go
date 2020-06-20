@@ -56,7 +56,6 @@ func ListenREST(s Service, restport int, grpcport int) error {
 	mux.HandleFunc("/parking.swagger.json", serveSwaggerJsonHandler)
 	fs := http.FileServer(http.Dir("./static/swagger"))
 	mux.Handle("/swagger-parking/", http.StripPrefix("/swagger-parking", fs))
-	log.Println("Serving Swagger at: http://localhost" + fmt.Sprintf(":%d", restport) + "/swagger-parking/")
 	return http.ListenAndServe(fmt.Sprintf(":%d", restport), mux)
 }
 
@@ -67,7 +66,7 @@ func (s *grpcServer) CreateLot(ctx context.Context, p *pb.CreateLotRequest) (*pb
 		log.Println(err)
 		return nil, err
 	}
-	return &pb.CreateLotResponse{Status: "created"}, nil
+	return &pb.CreateLotResponse{Status: "Success"}, nil
 }
 
 func (s *grpcServer) PostPark(ctx context.Context, p *pb.PostParkRequest) (*pb.PostParkResponse, error) {
@@ -76,7 +75,7 @@ func (s *grpcServer) PostPark(ctx context.Context, p *pb.PostParkRequest) (*pb.P
 		log.Println(err)
 		return nil, err
 	}
-	return &pb.PostParkResponse{Park: &pb.Park{SlotNum: r.SlotNum, CarReg: r.CarReg, CarColour: r.CarColour}}, nil
+	return &pb.PostParkResponse{Park: &pb.Park{SlotNum: r.SlotNum, CarReg: r.CarReg, CarColour: r.CarColour}, Status: "Success"}, nil
 }
 
 func (s *grpcServer) PostUnpark(ctx context.Context, p *pb.PostUnparkRequest) (*pb.PostUnparkResponse, error) {
@@ -86,7 +85,7 @@ func (s *grpcServer) PostUnpark(ctx context.Context, p *pb.PostUnparkRequest) (*
 		log.Println(err)
 		return nil, err
 	}
-	return &pb.PostUnparkResponse{Status: "removed"}, nil
+	return &pb.PostUnparkResponse{Status: "Success"}, nil
 }
 
 func (s *grpcServer) GetParks(ctx context.Context, p *pb.GetParksRequest) (*pb.GetParksResponse, error) {
@@ -108,7 +107,7 @@ func (s *grpcServer) GetParks(ctx context.Context, p *pb.GetParksRequest) (*pb.G
 		)
 	}
 
-	return &pb.GetParksResponse{Parks: parks}, nil
+	return &pb.GetParksResponse{Parks: parks, Status: "Success"}, nil
 }
 func (s *grpcServer) GetCarRegsByColour(ctx context.Context, p *pb.GetCarRegsByColourRequest) (*pb.GetCarRegsByColourResponse, error) {
 	r, err := s.service.GetCarRegsByColour(ctx, p.CarColour)
@@ -124,7 +123,7 @@ func (s *grpcServer) GetCarRegsByColour(ctx context.Context, p *pb.GetCarRegsByC
 			a)
 	}
 
-	return &pb.GetCarRegsByColourResponse{Cars: cars}, nil
+	return &pb.GetCarRegsByColourResponse{Cars: cars, Status: "Success"}, nil
 }
 
 func (s *grpcServer) GetSlotsByColour(ctx context.Context, p *pb.GetSlotsByColourRequest) (*pb.GetSlotsByColourResponse, error) {
@@ -140,7 +139,7 @@ func (s *grpcServer) GetSlotsByColour(ctx context.Context, p *pb.GetSlotsByColou
 			slots, a)
 	}
 
-	return &pb.GetSlotsByColourResponse{Slots: slots}, nil
+	return &pb.GetSlotsByColourResponse{Slots: slots, Status: "Success"}, nil
 }
 
 func (s *grpcServer) GetSlotByCarReg(ctx context.Context, p *pb.GetSlotByCarRegRequest) (*pb.GetSlotByCarRegResponse, error) {
@@ -149,5 +148,5 @@ func (s *grpcServer) GetSlotByCarReg(ctx context.Context, p *pb.GetSlotByCarRegR
 		log.Println(err)
 		return nil, err
 	}
-	return &pb.GetSlotByCarRegResponse{SlotNum: r.SlotNum}, nil
+	return &pb.GetSlotByCarRegResponse{SlotNum: r.SlotNum, Status: "Success"}, nil
 }

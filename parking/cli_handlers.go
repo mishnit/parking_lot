@@ -10,19 +10,27 @@ import (
 )
 
 type StatusRes struct {
-	Parks []Park `json:"Parks"`
+	Parks  []Park `json:"Parks"`
+	Status string `json:"Status"`
 }
 
 type RegistrationNumbersRes struct {
-	Cars []string `json:"Cars"`
+	Cars   []string `json:"Cars"`
+	Status string   `json:"Status"`
 }
 
 type SlotNumbersRes struct {
-	Slots []int `json:"Slots"`
+	Slots  []int  `json:"Slots"`
+	Status string `json:"Status"`
 }
 
-type SlotNumberReqRes struct {
+type SlotNumberReq struct {
 	SlotNum int `json:"SlotNum"`
+}
+
+type SlotNumberRes struct {
+	SlotNum int    `json:"SlotNum"`
+	Status  string `json:"Status"`
 }
 
 type ParkingLotReq struct {
@@ -42,6 +50,74 @@ type ParkRes struct {
 	SlotNum   int    `json:"SlotNum"`
 	CarReg    string `json:"CarReg"`
 	CarColour string `json:"CarColour"`
+	Status    string `json:"Status"`
+}
+
+func CreateParkingLot(n int) string {
+	lot := ParkingLotReq{n}
+	jsonReq, err := json.Marshal(lot)
+	resp, err := http.Post("http://localhost:3569/api/v1/createlot", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+
+	var response Res
+	json.Unmarshal(bodyBytes, &response)
+
+	if response.Status != "Success" {
+		return "Not found"
+	}
+	return "Created a parking lot with " + strconv.Itoa(n) + " slots"
+}
+
+func DoPark(cpn string, cc string) string {
+	park := ParkReq{cpn, cc}
+	jsonReq, err := json.Marshal(park)
+	resp, err := http.Post("http://localhost:3569/api/v1/postpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+
+	var response ParkRes
+	json.Unmarshal(bodyBytes, &response)
+
+	if response.Status != "Success" {
+		return "Not found"
+	}
+
+	ppc := response.SlotNum
+	sn := strconv.Itoa(ppc)
+	return "Allocated slot number: " + sn
+}
+
+func Leave(slotNumber int) string {
+
+	slot := SlotNumberReq{slotNumber}
+	jsonReq, err := json.Marshal(slot)
+	resp, err := http.Post("http://localhost:3569/api/v1/postunpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+
+	var response Res
+	json.Unmarshal(bodyBytes, &response)
+
+	if response.Status != "Success" {
+		return "Not found"
+	}
+
+	sn := strconv.Itoa(slotNumber)
+
+	return "Slot number " + sn + " is free"
 }
 
 func Status() []string {
@@ -57,9 +133,13 @@ func Status() []string {
 	json.Unmarshal(bodyBytes, &response)
 
 	var status []string
+	if response.Status != "Success" {
+		return status
+	}
+
 	for _, value := range response.Parks {
 		slotNumber := strconv.FormatUint(uint64(value.SlotNum), 10)
-		s := slotNumber + "\t" + value.CarReg + "\t" + value.CarColour
+		s := slotNumber + "           " + value.CarReg + "      " + value.CarColour
 		status = append(status, s)
 	}
 
@@ -78,7 +158,10 @@ func RegistrationNumbersForCarsWithColour(carColor string) string {
 	var response RegistrationNumbersRes
 	json.Unmarshal(bodyBytes, &response)
 
-	//KA-01-HH-1234, KA-01-HH-9999, KA-01-P-333
+	if response.Status != "Success" {
+		return "Not found"
+	}
+
 	var s string
 	for _, value := range response.Cars {
 		carPlateNumber := value
@@ -102,6 +185,9 @@ func SlotNumbersForCarsWithColour(carColor string) string {
 	var response SlotNumbersRes
 	json.Unmarshal(bodyBytes, &response)
 
+	if response.Status != "Success" {
+		return "Not found"
+	}
 	var s string
 	for _, value := range response.Slots {
 		slotNumber := strconv.Itoa(value)
@@ -122,82 +208,18 @@ func SlotNumberForRegistrationNumber(carPlateNumber string) string {
 	defer resp.Body.Close()
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
-	var response SlotNumberReqRes
+	var response SlotNumberRes
 	json.Unmarshal(bodyBytes, &response)
 
+	if response.Status != "Success" {
+		return "Not found"
+	}
+
 	var slotNumber string
-	if response != (SlotNumberReqRes{}) {
+	if response != (SlotNumberRes{}) {
 		slotNumber = strconv.Itoa(response.SlotNum)
 	} else {
 		slotNumber = "Not found"
 	}
 	return slotNumber
-}
-
-func CreateParkingLot(s string) string {
-	n, err := strconv.Atoi(s)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	lot := ParkingLotReq{n}
-	jsonReq, err := json.Marshal(lot)
-	resp, err := http.Post("http://localhost:3569/api/v1/createlot", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-
-	var response Res
-	json.Unmarshal(bodyBytes, &response)
-
-	if response.Status != "created" {
-		log.Fatalln(err)
-	}
-
-	return "Created a parking lot with " + s + " slots"
-}
-
-func DoPark(cpn string, cc string) string {
-	park := ParkReq{cpn, cc}
-	jsonReq, err := json.Marshal(park)
-	resp, err := http.Post("http://localhost:3569/api/v1/postpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-
-	var response ParkRes
-	json.Unmarshal(bodyBytes, &response)
-
-	ppc := response.SlotNum
-	sn := strconv.Itoa(ppc)
-	return "Allocated slot number: " + sn
-}
-
-func Leave(slotNumber int) string {
-
-	slot := SlotNumberReqRes{slotNumber}
-	jsonReq, err := json.Marshal(slot)
-	resp, err := http.Post("http://localhost:3569/api/v1/postunpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-
-	var response Res
-	json.Unmarshal(bodyBytes, &response)
-
-	if response.Status != "deleted" {
-		log.Fatalln(err)
-	}
-
-	sn := strconv.Itoa(slotNumber)
-
-	return "Slot number " + sn + " is free"
 }

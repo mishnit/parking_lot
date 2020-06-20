@@ -1,4 +1,11 @@
 #!/bin/bash
 
+echo "------------------Installing dependencies in vendor folder----------------"
 make mod
+echo "-------------Running Unit Test cases(grpc+res) in test docker-------------"
+make test
+echo "--------------------Building Production GRPC server-----------------------"
+make run
+echo "------------------Building commands in build folder-----------------------"
+make cli
 ./bin/run_functional_tests

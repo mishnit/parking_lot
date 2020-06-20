@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Parking Lot",
-    "version": "v 1.4.2"
+    "title": "parking",
+    "version": "version 1.4.2"
   },
   "schemes": [
     "http"
@@ -207,6 +207,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "Status": {
+          "type": "string"
         }
       }
     },
@@ -218,6 +221,9 @@
           "items": {
             "$ref": "#/definitions/protobufPark"
           }
+        },
+        "Status": {
+          "type": "string"
         }
       }
     },
@@ -227,6 +233,9 @@
         "SlotNum": {
           "type": "integer",
           "format": "int64"
+        },
+        "Status": {
+          "type": "string"
         }
       }
     },
@@ -239,6 +248,9 @@
             "type": "integer",
             "format": "int64"
           }
+        },
+        "Status": {
+          "type": "string"
         }
       }
     },
@@ -273,6 +285,9 @@
       "properties": {
         "Park": {
           "$ref": "#/definitions/protobufPark"
+        },
+        "Status": {
+          "type": "string"
         }
       }
     },

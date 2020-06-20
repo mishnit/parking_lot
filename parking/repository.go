@@ -41,12 +41,30 @@ func (r *postgresRepository) Close() {
 }
 
 func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint32) error {
-	_, err := r.db.ExecContext(ctx, `INSERT INTO parking_lots(max_slots_count) VALUES($1)`, maxslotscount)
+	if maxslotscount == 0 {
+		return ErrLotSizeZero
+	}
+
+	_, err := r.db.ExecContext(ctx, "DELETE FROM parks")
+
+	if err != nil {
+		return err
+	}
+	_, err = r.db.ExecContext(ctx, "DELETE FROM parking_lots")
+
+	if err != nil {
+		return err
+	}
+	_, err = r.db.ExecContext(ctx, `INSERT INTO parking_lots(max_slots_count) VALUES($1)`, maxslotscount)
 	return err
 }
 
 func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error) {
 	p := &Park{}
+
+	if !regexCarNumber.MatchString(carreg) {
+		return nil, ErrInvalidCarNumber
+	}
 	//select recent created parking lot
 	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	var ParkingLotID uint32
@@ -131,6 +149,11 @@ func (r *postgresRepository) PostUnpark(ctx context.Context, slotnum uint32) err
 	var UsedSlotsCount uint32
 	var MaxSlotsCount uint32
 	var CurrSlotNum uint32
+
+	// is slot invalid?
+	if slotnum == 0 {
+		return ErrInvalidSlot
+	}
 
 	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	if err := row.Scan(&ParkingLotID, &MaxSlotsCount, &UsedSlotsCount, &CurrSlotNum); err != nil {
@@ -269,6 +292,9 @@ func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour str
 }
 
 func (r *postgresRepository) GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error) {
+	if !regexCarNumber.MatchString(carreg) {
+		return nil, ErrInvalidCarNumber
+	}
 	slot := &Slot{}
 	row := r.db.QueryRowContext(ctx, `SELECT slot_num FROM parks WHERE car_reg = $1`, carreg)
 

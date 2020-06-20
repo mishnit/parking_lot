@@ -31,6 +31,7 @@ message PostParkRequest {
 
 message PostParkResponse {
   Park Park = 1;
+  string Status = 2;
 }
 
 message PostUnparkRequest {
@@ -46,6 +47,7 @@ message GetParksRequest{
 
 message GetParksResponse{
   repeated Park Parks = 1;
+  string Status = 2;
 }
 
 message GetCarRegsByColourRequest {
@@ -54,6 +56,7 @@ message GetCarRegsByColourRequest {
 
 message GetCarRegsByColourResponse {
   repeated string Cars = 1;
+  string Status = 2;
 }
 
 message GetSlotsByColourRequest {
@@ -62,6 +65,7 @@ message GetSlotsByColourRequest {
 
 message GetSlotsByColourResponse {
   repeated uint32 Slots = 1;
+  string Status = 2;
 }
 
 message GetSlotByCarRegRequest {
@@ -70,6 +74,7 @@ message GetSlotByCarRegRequest {
 
 message GetSlotByCarRegResponse {
   uint32 SlotNum = 1;
+  string Status = 2;
 }
 
 service ParkingService {
