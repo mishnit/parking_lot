@@ -2,5 +2,5 @@
 
 ./build/parking_lot bin/fixtures/file_input.txt > bin/fixtures/file_output.txt
 echo "-----------------Running functional tests against specs-------------------"
-cmp -s file_output.txt file_expected.txt && \
+cmp -s bin/fixtures/file_output.txt bin/fixtures/file_expected.txt && \
 echo 'SUCCESS: functional tests passed' || echo 'FAILURE: functional tests failed'

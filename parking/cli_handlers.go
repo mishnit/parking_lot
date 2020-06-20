@@ -47,10 +47,8 @@ type ParkReq struct {
 }
 
 type ParkRes struct {
-	SlotNum   int    `json:"SlotNum"`
-	CarReg    string `json:"CarReg"`
-	CarColour string `json:"CarColour"`
-	Status    string `json:"Status"`
+	Park   Park   `json:"Park"`
+	Status string `json:"Status"`
 }
 
 func CreateParkingLot(n int) string {
@@ -88,11 +86,11 @@ func DoPark(cpn string, cc string) string {
 	json.Unmarshal(bodyBytes, &response)
 
 	if response.Status != "Success" {
-		return "Not found"
+		return "Sorry, parking lot is full"
 	}
 
-	ppc := response.SlotNum
-	sn := strconv.Itoa(ppc)
+	ppc := response.Park.SlotNum
+	sn := strconv.Itoa(int(ppc))
 	return "Allocated slot number: " + sn
 }
 
