@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "parking",
-    "version": "version 1.4.2"
+    "version": "v 1.4.2"
   },
   "schemes": [
     "http"

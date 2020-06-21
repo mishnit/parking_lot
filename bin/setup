@@ -2,10 +2,13 @@
 
 echo "------------------Installing dependencies in vendor folder----------------"
 make mod
-echo "--------------------Building GRPC server-----------------------"
-make run
-echo "-------------Running Unit Test cases(grpc+rest) in test docker-------------"
+echo "Done"
+echo "-----------------Running unit test cases in test docker-------------------"
 make test
+echo "Done"
+echo "---------------------------Building GRPC server---------------------------"
+make run
+echo "Done"
 echo "------------------Building commands in build folder-----------------------"
 make cli
-./bin/run_functional_tests
+echo "Done"

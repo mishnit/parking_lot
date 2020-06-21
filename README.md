@@ -22,16 +22,6 @@ $ ./bin/run_functional_tests
 $ ./bin/parking_lot
 ```
 
-## PASS File as an argument:
-```
-$ ./build/parking_lot bin/fixtures/file_input.txt
-```
-
-## REST APIs
-```
-http://localhost:3569/swagger-parking/
-```
-
 ## Commands Usage
 ```
 create_parking_lot <max_slots_num>                        Create Parking lot of size n
@@ -44,18 +34,28 @@ slot_number_for_registration_number <car_reg_number>      Display slot number fo
 exit                                                      Exit from shell
 ```
 
-## Error Codes & Formats (check all muct be part of commands as well as rest)
+## PASS File as an argument:
 ```
-ErrNoParkingLotCreated  No parking lot available. Create parking lot first
-ErrLotSizeZero          Lot size cannot be zero!
-ErrParkingFull          Sorry, parking lot is full
-ErrParkingEmpty         Lot is Empty!
-ErrInvalidSlot          Slot Invalid!
-ErrParking              Parking slot is Empty!
-ErrInvalidCarNumber     Invalid Indian Car Number Plate Format!
-regexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{4}$
+$ ./build/parking_lot bin/fixtures/file_input.txt
 ```
 
-TODO: cli_handlers_test.go works fine on localhost but not on docker
-TODO: update cli_handlers_test.go for positive, negative (error code checks) unit test cases
-TODO: send tarball zip and no code public being made
+## REST APIs
+```
+http://localhost:3569/swagger-parking/
+```
+
+## Error Codes & Messages
+```
+ErrLotSizeZero          Lot size cannot be zero
+ErrNoLotFound           No lot available, please create a lot first
+ErrParkingFull          Sorry, parking lot is full
+ErrInvalidSlot          Slot invalid
+ErrParking              Parking slot is empty
+ErrInvalidCarNumber     Invalid indian car number plate format
+ErrNotFound             Not found
+Error                   Unexpected error occured
+regexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$
+```
+
+TODO: add unit test cases for parking package only (not for commando package)
+TODO: verify all make commands and bin functions once again

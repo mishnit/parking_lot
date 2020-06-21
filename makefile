@@ -1,7 +1,7 @@
 #!/bin/bash
 run: stop up
 
-grpc: #need to update grpc code when there is change in proto definitions
+grpc: #need to update protobuf code when there is change in grpc code
 	$(shell go generate parking/grpc_server.go)
 
 mod:
@@ -12,15 +12,14 @@ stop:
 	docker-compose -f docker-compose.yaml stop
 
 up:
-	docker-compose -f docker-compose.yaml up -d --build
+	docker-compose -f docker-compose.yaml up -d --build --remove-orphans
 
 test:
-	docker-compose -f docker-compose-test.yaml up -d --build
-	docker system prune -f --volumes
+	docker-compose -f docker-compose-test.yaml up -d --build --remove-orphans
 
 cli:
 	@mkdir -p build && \
 	cd build && \
-	go build -o parking_lot ../parking/commands && \
+	go build -o parking_lot ../commando/cmd/commando && \
 	chmod -R 777 . && \
 	cd ..

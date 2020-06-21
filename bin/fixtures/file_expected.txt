@@ -1,11 +1,16 @@
+Lot size cannot be zero
 Created a parking lot with 6 slots
 Allocated slot number: 1
+Invalid indian car number plate format
 Allocated slot number: 2
 Allocated slot number: 3
 Allocated slot number: 4
 Allocated slot number: 5
 Allocated slot number: 6
 Slot number 4 is free
+Parking slot is empty
+Slot invalid
+Slot invalid
 Slot No.    Registration No    Colour
 1           KA-01-HH-1234      White
 2           KA-01-HH-9999      White

@@ -62,18 +62,35 @@ func ListenREST(s Service, restport int, grpcport int) error {
 func (s *grpcServer) CreateLot(ctx context.Context, p *pb.CreateLotRequest) (*pb.CreateLotResponse, error) {
 	err := s.service.CreateLot(ctx, p.MaxSlotsCount)
 
+	if err == ErrLotSizeZero {
+		return &pb.CreateLotResponse{Status: "ErrLotSizeZero"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.CreateLotResponse{Status: "Error"}, nil
 	}
 	return &pb.CreateLotResponse{Status: "Success"}, nil
 }
 
 func (s *grpcServer) PostPark(ctx context.Context, p *pb.PostParkRequest) (*pb.PostParkResponse, error) {
 	r, err := s.service.PostPark(ctx, p.CarReg, p.CarColour)
+
+	if err == ErrInvalidCarNumber {
+		return &pb.PostParkResponse{Park: &pb.Park{}, Status: "ErrInvalidCarNumber"}, nil
+	}
+
+	if err == ErrNoLotFound {
+		return &pb.PostParkResponse{Park: &pb.Park{}, Status: "ErrNoLotFound"}, nil
+	}
+
+	if err == ErrParkingFull {
+		return &pb.PostParkResponse{Park: &pb.Park{}, Status: "ErrParkingFull"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.PostParkResponse{Park: &pb.Park{}, Status: "Error"}, nil
 	}
 	return &pb.PostParkResponse{Park: &pb.Park{SlotNum: r.SlotNum, CarReg: r.CarReg, CarColour: r.CarColour}, Status: "Success"}, nil
 }
@@ -81,18 +98,39 @@ func (s *grpcServer) PostPark(ctx context.Context, p *pb.PostParkRequest) (*pb.P
 func (s *grpcServer) PostUnpark(ctx context.Context, p *pb.PostUnparkRequest) (*pb.PostUnparkResponse, error) {
 	err := s.service.PostUnpark(ctx, p.SlotNum)
 
+	if err == ErrInvalidSlot {
+		return &pb.PostUnparkResponse{Status: "ErrInvalidSlot"}, nil
+	}
+
+	if err == ErrNoLotFound {
+		return &pb.PostUnparkResponse{Status: "ErrNoLotFound"}, nil
+	}
+
+	if err == ErrParking {
+		return &pb.PostUnparkResponse{Status: "ErrParking"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.PostUnparkResponse{Status: "Error"}, nil
 	}
 	return &pb.PostUnparkResponse{Status: "Success"}, nil
 }
 
 func (s *grpcServer) GetParks(ctx context.Context, p *pb.GetParksRequest) (*pb.GetParksResponse, error) {
 	r, err := s.service.GetParks(ctx)
+
+	if err == ErrNoLotFound {
+		return &pb.GetParksResponse{Parks: []*pb.Park{}, Status: "ErrNoLotFound"}, nil
+	}
+
+	if err == ErrNotFound {
+		return &pb.GetParksResponse{Parks: []*pb.Park{}, Status: "ErrNotFound"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.GetParksResponse{Parks: []*pb.Park{}, Status: "Error"}, nil
 	}
 
 	parks := []*pb.Park{}
@@ -109,11 +147,21 @@ func (s *grpcServer) GetParks(ctx context.Context, p *pb.GetParksRequest) (*pb.G
 
 	return &pb.GetParksResponse{Parks: parks, Status: "Success"}, nil
 }
+
 func (s *grpcServer) GetCarRegsByColour(ctx context.Context, p *pb.GetCarRegsByColourRequest) (*pb.GetCarRegsByColourResponse, error) {
 	r, err := s.service.GetCarRegsByColour(ctx, p.CarColour)
+
+	if err == ErrNoLotFound {
+		return &pb.GetCarRegsByColourResponse{Cars: []string{}, Status: "ErrNoLotFound"}, nil
+	}
+
+	if err == ErrNotFound {
+		return &pb.GetCarRegsByColourResponse{Cars: []string{}, Status: "ErrNotFound"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.GetCarRegsByColourResponse{Cars: []string{}, Status: "Error"}, nil
 	}
 
 	cars := []string{}
@@ -128,9 +176,18 @@ func (s *grpcServer) GetCarRegsByColour(ctx context.Context, p *pb.GetCarRegsByC
 
 func (s *grpcServer) GetSlotsByColour(ctx context.Context, p *pb.GetSlotsByColourRequest) (*pb.GetSlotsByColourResponse, error) {
 	r, err := s.service.GetSlotsByColour(ctx, p.CarColour)
+
+	if err == ErrNoLotFound {
+		return &pb.GetSlotsByColourResponse{Slots: []uint32{}, Status: "ErrNoLotFound"}, nil
+	}
+
+	if err == ErrNotFound {
+		return &pb.GetSlotsByColourResponse{Slots: []uint32{}, Status: "ErrNotFound"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.GetSlotsByColourResponse{Slots: []uint32{}, Status: "Error"}, nil
 	}
 
 	slots := []uint32{}
@@ -144,9 +201,19 @@ func (s *grpcServer) GetSlotsByColour(ctx context.Context, p *pb.GetSlotsByColou
 
 func (s *grpcServer) GetSlotByCarReg(ctx context.Context, p *pb.GetSlotByCarRegRequest) (*pb.GetSlotByCarRegResponse, error) {
 	r, err := s.service.GetSlotByCarReg(ctx, p.CarReg)
+
+	var a uint32
+	if err == ErrInvalidCarNumber {
+		return &pb.GetSlotByCarRegResponse{SlotNum: a, Status: "ErrInvalidCarNumber"}, nil
+	}
+
+	if err == ErrNotFound {
+		return &pb.GetSlotByCarRegResponse{SlotNum: a, Status: "ErrNotFound"}, nil
+	}
+
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return &pb.GetSlotByCarRegResponse{SlotNum: a, Status: "Error"}, nil
 	}
 	return &pb.GetSlotByCarRegResponse{SlotNum: r.SlotNum, Status: "Success"}, nil
 }

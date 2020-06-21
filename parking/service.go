@@ -7,13 +7,14 @@ import (
 )
 
 var (
-	ErrLotSizeZero      = errors.New("Err: Lot size cannot be zero!")
-	ErrParkingFull      = errors.New("Err: Lot is Full!")
-	ErrParkingEmpty     = errors.New("Err: Lot is Empty!")
-	ErrInvalidSlot      = errors.New("Err: Slot Invalid!")
-	ErrParking          = errors.New("Err: Parking slot is Empty!")
+	ErrNoLotFound       = errors.New("No lot available, please create a lot first")
+	ErrLotSizeZero      = errors.New("Lot size cannot be zero")
+	ErrParkingFull      = errors.New("Sorry, parking lot is full")
+	ErrInvalidSlot      = errors.New("Slot invalid")
+	ErrParking          = errors.New("Parking slot is empty")
 	regexCarNumber      = regexp.MustCompile(`^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$`)
-	ErrInvalidCarNumber = errors.New("Err: Invalid Indian Car Number Plate Format!")
+	ErrInvalidCarNumber = errors.New("Invalid indian car number plate format")
+	ErrNotFound         = errors.New("Not found")
 )
 
 type Park struct {

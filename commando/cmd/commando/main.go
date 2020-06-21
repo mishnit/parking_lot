@@ -5,8 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
-	"parking_lot/parking"
+	"parking_lot/commando"
 	"strconv"
 	"strings"
 )
@@ -16,8 +15,6 @@ func main() {
 	if len(flag.Args()) > 0 {
 		executeFile(flag.Args()[0])
 	} else {
-		cmd := exec.Command("source " + "start.sh")
-		cmd.Run()
 		fmt.Println("Welcome to parking lot 1.4.2")
 		fmt.Println("Available Commands:")
 		fmt.Println("		- create_parking_lot <max_slots_num>")
@@ -42,8 +39,6 @@ func executeInlineCommands() {
 		inputText = strings.TrimRight(inputText, "\r\n")
 		if inputText == "exit" {
 			fmt.Println("Thanks for using Parking Lot 1.4.2")
-			cmd := exec.Command("source " + "exit.sh")
-			cmd.Run()
 			break
 		}
 		runCmdInput(inputText)
@@ -77,32 +72,32 @@ func runCommand(command []string) {
 		if err != nil {
 			panic(err.Error())
 		}
-		cpl := parking.CreateParkingLot(maxSlots)
+		cpl := commando.CreateParkingLot(maxSlots)
 		fmt.Println(cpl)
 	case "park":
-		p := parking.DoPark(command[1], command[2])
+		p := commando.DoPark(command[1], command[2])
 		fmt.Println(p)
 	case "leave":
 		no, err := strconv.Atoi(command[1])
 		if err != nil {
 			panic(err.Error())
 		}
-		l := parking.Leave(no)
+		l := commando.Leave(no)
 		fmt.Println(l)
 	case "status":
-		status := parking.Status()
+		status := commando.Status()
 		fmt.Println("Slot No.    Registration No    Colour")
 		for _, parkingCar := range status {
 			fmt.Println(parkingCar)
 		}
 	case "registration_numbers_for_cars_with_colour":
-		r := parking.RegistrationNumbersForCarsWithColour(command[1])
+		r := commando.RegistrationNumbersForCarsWithColour(command[1])
 		fmt.Println(r)
 	case "slot_numbers_for_cars_with_colour":
-		ss := parking.SlotNumbersForCarsWithColour(command[1])
+		ss := commando.SlotNumbersForCarsWithColour(command[1])
 		fmt.Println(ss)
 	case "slot_number_for_registration_number":
-		s := parking.SlotNumberForRegistrationNumber(command[1])
+		s := commando.SlotNumberForRegistrationNumber(command[1])
 		fmt.Println(s)
 	default:
 		fmt.Println("There is no such command available")

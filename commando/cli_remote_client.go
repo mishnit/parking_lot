@@ -1,4 +1,4 @@
-package parking
+package commando
 
 import (
 	"bytes"
@@ -7,7 +7,14 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
+
+type Park struct {
+	SlotNum   uint32 `json:"SlotNum"`
+	CarReg    string `json:"CarReg"`
+	CarColour string `json:"CarColour"`
+}
 
 type StatusRes struct {
 	Parks  []Park `json:"Parks"`
@@ -55,8 +62,10 @@ func CreateParkingLot(n int) string {
 	lot := ParkingLotReq{n}
 	jsonReq, err := json.Marshal(lot)
 	resp, err := http.Post("http://localhost:3569/api/v1/createlot", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+
 	if err != nil {
 		log.Fatalln(err)
+		return "Error"
 	}
 
 	defer resp.Body.Close()
@@ -65,9 +74,14 @@ func CreateParkingLot(n int) string {
 	var response Res
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status != "Success" {
-		return "Not found"
+	if response.Status == "ErrLotSizeZero" {
+		return "Lot size cannot be zero"
 	}
+
+	if response.Status == "Error" {
+		return "Unexpected error occured"
+	}
+
 	return "Created a parking lot with " + strconv.Itoa(n) + " slots"
 }
 
@@ -77,6 +91,7 @@ func DoPark(cpn string, cc string) string {
 	resp, err := http.Post("http://localhost:3569/api/v1/postpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		log.Fatalln(err)
+		return "Error"
 	}
 
 	defer resp.Body.Close()
@@ -85,8 +100,20 @@ func DoPark(cpn string, cc string) string {
 	var response ParkRes
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status != "Success" {
+	if response.Status == "ErrInvalidCarNumber" {
+		return "Invalid indian car number plate format"
+	}
+
+	if response.Status == "ErrNoLotFound" {
+		return "No lot available, please create a lot first"
+	}
+
+	if response.Status == "ErrParkingFull" {
 		return "Sorry, parking lot is full"
+	}
+
+	if response.Status == "Error" {
+		return "Unexpected error occured"
 	}
 
 	ppc := response.Park.SlotNum
@@ -95,12 +122,12 @@ func DoPark(cpn string, cc string) string {
 }
 
 func Leave(slotNumber int) string {
-
 	slot := SlotNumberReq{slotNumber}
 	jsonReq, err := json.Marshal(slot)
 	resp, err := http.Post("http://localhost:3569/api/v1/postunpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		log.Fatalln(err)
+		return "Error"
 	}
 
 	defer resp.Body.Close()
@@ -109,8 +136,20 @@ func Leave(slotNumber int) string {
 	var response Res
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status != "Success" {
-		return "Not found"
+	if response.Status == "ErrInvalidSlot" {
+		return "Slot invalid"
+	}
+
+	if response.Status == "ErrNoLotFound" {
+		return "No lot available, please create a lot first"
+	}
+
+	if response.Status == "ErrParking" {
+		return "Parking slot is empty"
+	}
+
+	if response.Status == "Error" {
+		return "Unexpected error occured"
 	}
 
 	sn := strconv.Itoa(slotNumber)
@@ -119,9 +158,12 @@ func Leave(slotNumber int) string {
 }
 
 func Status() []string {
+	var status []string
 	resp, err := http.Get("http://localhost:3569/api/v1/getparks")
 	if err != nil {
 		log.Fatalln(err)
+		status = append(status, "Error")
+		return status
 	}
 
 	defer resp.Body.Close()
@@ -130,8 +172,18 @@ func Status() []string {
 	var response StatusRes
 	json.Unmarshal(bodyBytes, &response)
 
-	var status []string
-	if response.Status != "Success" {
+	if response.Status == "ErrNoLotFound" {
+		status = append(status, "No lot available, please create a lot first")
+		return status
+	}
+
+	if response.Status == "ErrNotFound" {
+		status = append(status, "Not found")
+		return status
+	}
+
+	if response.Status == "Error" {
+		status = append(status, "Unexpected error occured")
 		return status
 	}
 
@@ -148,6 +200,7 @@ func RegistrationNumbersForCarsWithColour(carColor string) string {
 	resp, err := http.Get("http://localhost:3569/api/v1/getcarregs/colour/" + carColor)
 	if err != nil {
 		log.Fatalln(err)
+		return "Error"
 	}
 
 	defer resp.Body.Close()
@@ -156,8 +209,16 @@ func RegistrationNumbersForCarsWithColour(carColor string) string {
 	var response RegistrationNumbersRes
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status != "Success" {
+	if response.Status == "ErrNoLotFound" {
+		return "No lot available, please create a lot first"
+	}
+
+	if response.Status == "ErrNotFound" {
 		return "Not found"
+	}
+
+	if response.Status == "Error" {
+		return "Unexpected error occured"
 	}
 
 	var s string
@@ -175,6 +236,7 @@ func SlotNumbersForCarsWithColour(carColor string) string {
 	resp, err := http.Get("http://localhost:3569/api/v1/getslots/colour/" + carColor)
 	if err != nil {
 		log.Fatalln(err)
+		return "Error"
 	}
 
 	defer resp.Body.Close()
@@ -183,9 +245,18 @@ func SlotNumbersForCarsWithColour(carColor string) string {
 	var response SlotNumbersRes
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status != "Success" {
+	if response.Status == "ErrNoLotFound" {
+		return "No lot available, please create a lot first"
+	}
+
+	if response.Status == "ErrNotFound" {
 		return "Not found"
 	}
+
+	if response.Status == "Error" {
+		return "Unexpected error occured"
+	}
+
 	var s string
 	for _, value := range response.Slots {
 		slotNumber := strconv.Itoa(value)
@@ -201,6 +272,7 @@ func SlotNumberForRegistrationNumber(carPlateNumber string) string {
 	resp, err := http.Get("http://localhost:3569/api/v1/getslot/reg/" + carPlateNumber)
 	if err != nil {
 		log.Fatalln(err)
+		return "Error"
 	}
 
 	defer resp.Body.Close()
@@ -209,15 +281,26 @@ func SlotNumberForRegistrationNumber(carPlateNumber string) string {
 	var response SlotNumberRes
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status != "Success" {
+	if response.Status == "ErrInvalidCarNumber" {
+		return "Invalid indian car number plate format"
+	}
+
+	if response.Status == "ErrNotFound" {
 		return "Not found"
 	}
 
-	var slotNumber string
-	if response != (SlotNumberRes{}) {
-		slotNumber = strconv.Itoa(response.SlotNum)
-	} else {
-		slotNumber = "Not found"
+	if response.Status == "Error" {
+		return "Unexpected error occured"
 	}
-	return slotNumber
+
+	sn := strconv.Itoa(response.SlotNum)
+
+	return sn
+}
+
+func trimSuffix(s, suffix string) string {
+	if strings.HasSuffix(s, suffix) {
+		s = s[:len(s)-len(suffix)]
+	}
+	return s
 }
