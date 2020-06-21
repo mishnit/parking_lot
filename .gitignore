@@ -1,3 +1,4 @@
+vendor/
 build/
 ParkingLot-1.4.2.pdf
 bin/fixtures/file_output.txt
