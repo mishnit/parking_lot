@@ -56,10 +56,10 @@ ErrParking              Parking slot is empty
 ErrInvalidCarNumber     Invalid indian car number plate format
 ErrNotFound             Not found
 Error                   Unexpected error occured
-regexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$
+RegexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$
 ```
 
-TODO: add unit test cases for parking package only (not for commando package)
+TODO: add unit test cases for grpc and test entire suite once
 TODO: while sending tarball verify .git is there and (vendor and build are not there)
 
 ## 😎 AUTHOR:

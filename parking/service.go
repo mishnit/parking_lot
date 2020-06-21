@@ -12,7 +12,7 @@ var (
 	ErrParkingFull      = errors.New("Sorry, parking lot is full")
 	ErrInvalidSlot      = errors.New("Slot invalid")
 	ErrParking          = errors.New("Parking slot is empty")
-	regexCarNumber      = regexp.MustCompile(`^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$`)
+	RegexCarNumber      = regexp.MustCompile(`^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$`)
 	ErrInvalidCarNumber = errors.New("Invalid indian car number plate format")
 	ErrNotFound         = errors.New("Not found")
 )

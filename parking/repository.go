@@ -62,7 +62,7 @@ func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint32
 func (r *postgresRepository) PostPark(ctx context.Context, carreg string, carcolour string) (*Park, error) {
 	p := &Park{}
 
-	if !regexCarNumber.MatchString(carreg) {
+	if !RegexCarNumber.MatchString(carreg) {
 		return nil, ErrInvalidCarNumber
 	}
 	//select recent created parking lot
@@ -292,7 +292,7 @@ func (r *postgresRepository) GetSlotsByColour(ctx context.Context, carcolour str
 }
 
 func (r *postgresRepository) GetSlotByCarReg(ctx context.Context, carreg string) (*Slot, error) {
-	if !regexCarNumber.MatchString(carreg) {
+	if !RegexCarNumber.MatchString(carreg) {
 		return nil, ErrInvalidCarNumber
 	}
 	slot := &Slot{}
