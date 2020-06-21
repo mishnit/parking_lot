@@ -1,28 +1,30 @@
-# Parking lot - Golang GRPC Microservice with REST and Command line interface
+## 🚗 PARKING LOT 1.4.2:
 
-## REQUIREMENTS:
+A Golang GRPC Microservice with REST and command line interface
+
+## 🦉 REQUIREMENTS:
 ```
-go version go1.13.1 linux/amd64
+go version go1.13.1 linux/amd64 (for installing dependencies in vendor folder and building commands in build folder)
 docker-compose version 1.21.2
 Docker version 19.03.2
 ```
 
-## RUN UNIT TESTS:
+## 🙈 RUN UNIT TESTS + BUILD:
 ```
 $ ./bin/setup
 ```
 
-## TEST FUNCTIONAL SPECS:
+## 😼 RUN FUNCTIONAL SPECS CHECK:
 ```
 $ ./bin/run_functional_tests
 ```
 
-## RUN INTERACTIVE SHELL:
+## 🦄 RUN INTERACTIVE SHELL:
 ```
 $ ./bin/parking_lot
 ```
 
-## Commands Usage
+## 🏆 COMMANDS USAGE:
 ```
 create_parking_lot <max_slots_num>                        Create Parking lot of size n
 park <car_reg_number> <car_colour>                        Park car in the first available slot from entry gate
@@ -34,17 +36,17 @@ slot_number_for_registration_number <car_reg_number>      Display slot number fo
 exit                                                      Exit from shell
 ```
 
-## PASS File as an argument:
+## 🐶 PASS FILE AS AN ARGUMENT:
 ```
 $ ./build/parking_lot bin/fixtures/file_input.txt
 ```
 
-## REST APIs
+## 🚀 REST APIS:
 ```
 http://localhost:3569/swagger-parking/
 ```
 
-## Error Codes & Messages
+## 🐞 ERROR CODES AND MESSAGES:
 ```
 ErrLotSizeZero          Lot size cannot be zero
 ErrNoLotFound           No lot available, please create a lot first
@@ -58,4 +60,9 @@ regexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$
 ```
 
 TODO: add unit test cases for parking package only (not for commando package)
-TODO: verify all make commands and bin functions once again
+TODO: while sending tarball verify .git is there and (vendor and build are not there)
+
+## 😎 AUTHOR:
+
+- Nitin Mishra
+- geekymishnit@gmail.com
