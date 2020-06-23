@@ -53,11 +53,12 @@ func runCmdInput(inputText string) {
 
 func executeFile(path string) {
 	file, err := os.Open(path)
-	defer file.Close()
+
 	if err != nil {
 		fmt.Println("file not found")
 		return
 	}
+	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		command := splitCommand(scanner.Text())
