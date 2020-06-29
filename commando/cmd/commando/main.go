@@ -132,7 +132,6 @@ func runCommand(command []string) {
 			fmt.Println("Invalid command")
 		}
 	case "help":
-		fmt.Println("Welcome to parking lot 1.4.2")
 		fmt.Println("Available Commands:")
 		fmt.Println("		- create_parking_lot <max_slots_num>")
 		fmt.Println("		- park <car_reg_number> <car_colour>")
