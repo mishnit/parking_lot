@@ -28,6 +28,10 @@ func (c *Client) Close() {
 }
 
 func (c *Client) CreateLot(ctx context.Context, maxslotscount uint32) (string, error) {
+	if maxslotscount <= 0 {
+		return "Lot size cannot be <= zero", nil
+	}
+
 	r, err := c.service.CreateLot(
 		ctx,
 		&pb.CreateLotRequest{MaxSlotsCount: maxslotscount},
@@ -55,6 +59,10 @@ func (c *Client) PostPark(ctx context.Context, carreg string, carcolour string) 
 }
 
 func (c *Client) PostUnpark(ctx context.Context, slotnum uint32) (string, error) {
+	if slotnum <= 0 {
+		return "Slot invalid", nil
+	}
+
 	r, err := c.service.PostUnpark(
 		ctx,
 		&pb.PostUnparkRequest{SlotNum: slotnum},

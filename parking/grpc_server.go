@@ -60,11 +60,11 @@ func ListenREST(s Service, restport int, grpcport int) error {
 }
 
 func (s *grpcServer) CreateLot(ctx context.Context, p *pb.CreateLotRequest) (*pb.CreateLotResponse, error) {
-	err := s.service.CreateLot(ctx, p.MaxSlotsCount)
-
-	if err == ErrLotSizeZero {
-		return &pb.CreateLotResponse{Status: "ErrLotSizeZero"}, nil
+	if p.MaxSlotsCount <= 0 {
+		return &pb.CreateLotResponse{Status: "ErrLotSizeLTEZero"}, nil
 	}
+
+	err := s.service.CreateLot(ctx, p.MaxSlotsCount)
 
 	if err != nil {
 		log.Println(err)
@@ -96,6 +96,10 @@ func (s *grpcServer) PostPark(ctx context.Context, p *pb.PostParkRequest) (*pb.P
 }
 
 func (s *grpcServer) PostUnpark(ctx context.Context, p *pb.PostUnparkRequest) (*pb.PostUnparkResponse, error) {
+	if p.SlotNum <= 0 {
+		return &pb.PostUnparkResponse{Status: "ErrInvalidSlot"}, nil
+	}
+
 	err := s.service.PostUnpark(ctx, p.SlotNum)
 
 	if err == ErrInvalidSlot {
