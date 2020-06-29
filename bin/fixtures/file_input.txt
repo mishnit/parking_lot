@@ -1,14 +1,17 @@
+create_parking_lot -1
 create_parking_lot 0
 create_parking_lot 6
 park KA-01-HH-1234 White
 park KA-01-PPP-333 White
 park KA-01-HH-9999 White
+park KA-01-BB-0001
 park KA-01-BB-0001 Black
 park KA-01-HH-7777 Red
 park KA-01-HH-2701 Blue
 park KA-01-HH-3141 Black
 leave 4
 leave 4
+leave -1
 leave 0
 leave 7
 status
