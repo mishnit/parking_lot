@@ -59,6 +59,10 @@ type ParkRes struct {
 }
 
 func CreateParkingLot(n int) string {
+	if n <= 0 {
+		return "Lot size cannot be <= zero"
+	}
+
 	lot := ParkingLotReq{n}
 	jsonReq, err := json.Marshal(lot)
 	resp, err := http.Post("http://localhost:3569/api/v1/createlot", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
@@ -74,8 +78,8 @@ func CreateParkingLot(n int) string {
 	var response Res
 	json.Unmarshal(bodyBytes, &response)
 
-	if response.Status == "ErrLotSizeZero" {
-		return "Lot size cannot be zero"
+	if response.Status == "ErrLotSizeLTEZero" {
+		return "Lot size cannot be <= zero"
 	}
 
 	if response.Status == "Error" {
@@ -122,9 +126,14 @@ func DoPark(cpn string, cc string) string {
 }
 
 func Leave(slotNumber int) string {
+	if slotNumber <= 0 {
+		return "Slot invalid"
+	}
+
 	slot := SlotNumberReq{slotNumber}
 	jsonReq, err := json.Marshal(slot)
 	resp, err := http.Post("http://localhost:3569/api/v1/postunpark", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+
 	if err != nil {
 		log.Fatalln(err)
 		return "Error"
