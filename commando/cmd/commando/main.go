@@ -24,6 +24,7 @@ func main() {
 		fmt.Println("		- registration_numbers_for_cars_with_colour <car_colour>")
 		fmt.Println("		- slot_numbers_for_cars_with_colour <car_colour>")
 		fmt.Println("		- slot_number_for_registration_number <car_reg_number>")
+		fmt.Println("		- help")
 		fmt.Println("		- exit")
 		executeInlineCommands()
 	}
@@ -69,37 +70,79 @@ func executeFile(path string) {
 func runCommand(command []string) {
 	switch command[0] {
 	case "create_parking_lot":
-		maxSlots, err := strconv.Atoi(command[1])
-		if err != nil {
-			panic(err.Error())
+		if len(command) == 2 {
+			maxSlots, err := strconv.Atoi(command[1])
+
+			if err != nil {
+				panic(err.Error())
+			}
+
+			cpl := commando.CreateParkingLot(maxSlots)
+			fmt.Println(cpl)
+		} else {
+			fmt.Println("Invalid command")
 		}
-		cpl := commando.CreateParkingLot(maxSlots)
-		fmt.Println(cpl)
 	case "park":
-		p := commando.DoPark(command[1], command[2])
-		fmt.Println(p)
-	case "leave":
-		no, err := strconv.Atoi(command[1])
-		if err != nil {
-			panic(err.Error())
+		if len(command) == 3 {
+			p := commando.DoPark(command[1], command[2])
+			fmt.Println(p)
+		} else {
+			fmt.Println("Invalid command")
 		}
-		l := commando.Leave(no)
-		fmt.Println(l)
+	case "leave":
+		if len(command) == 2 {
+			no, err := strconv.Atoi(command[1])
+			if err != nil {
+				panic(err.Error())
+			}
+			l := commando.Leave(no)
+			fmt.Println(l)
+		} else {
+			fmt.Println("Invalid command")
+		}
 	case "status":
-		status := commando.Status()
-		fmt.Println("Slot No.    Registration No    Colour")
-		for _, parkingCar := range status {
-			fmt.Println(parkingCar)
+		if len(command) == 1 {
+			status := commando.Status()
+			fmt.Println("Slot No.    Registration No    Colour")
+			for _, parkingCar := range status {
+				fmt.Println(parkingCar)
+			}
+		} else {
+			fmt.Println("Invalid command")
 		}
 	case "registration_numbers_for_cars_with_colour":
-		r := commando.RegistrationNumbersForCarsWithColour(command[1])
-		fmt.Println(r)
+		if len(command) == 2 {
+			r := commando.RegistrationNumbersForCarsWithColour(command[1])
+			fmt.Println(r)
+		} else {
+			fmt.Println("Invalid command")
+		}
 	case "slot_numbers_for_cars_with_colour":
-		ss := commando.SlotNumbersForCarsWithColour(command[1])
-		fmt.Println(ss)
+		if len(command) == 2 {
+			ss := commando.SlotNumbersForCarsWithColour(command[1])
+			fmt.Println(ss)
+		} else {
+			fmt.Println("Invalid command")
+		}
 	case "slot_number_for_registration_number":
-		s := commando.SlotNumberForRegistrationNumber(command[1])
-		fmt.Println(s)
+		if len(command) == 2 {
+			s := commando.SlotNumberForRegistrationNumber(command[1])
+			fmt.Println(s)
+		} else {
+			fmt.Println("Invalid command")
+		}
+	case "help":
+		fmt.Println("Welcome to parking lot 1.4.2")
+		fmt.Println("Available Commands:")
+		fmt.Println("		- create_parking_lot <max_slots_num>")
+		fmt.Println("		- park <car_reg_number> <car_colour>")
+		fmt.Println("		- leave <slot_num>")
+		fmt.Println("		- status")
+		fmt.Println("		- registration_numbers_for_cars_with_colour <car_colour>")
+		fmt.Println("		- slot_numbers_for_cars_with_colour <car_colour>")
+		fmt.Println("		- slot_number_for_registration_number <car_reg_number>")
+		fmt.Println("		- help")
+		fmt.Println("		- exit")
 	default:
 		fmt.Println("There is no such command available")
 	}
