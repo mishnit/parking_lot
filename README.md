@@ -1,6 +1,6 @@
 ## 🚗 PARKING LOT 1.4.2:
 
-A Golang GRPC Microservice with REST and command line interface
+A Golang GRPC Microservice with REST and command line interface (Dockerised Application)
 
 ## 🦉 REQUIREMENTS:
 ```
@@ -48,7 +48,7 @@ http://localhost:3569/swagger-parking/
 
 ## 🐞 ERROR CODES AND MESSAGES:
 ```
-ErrLotSizeZero          Lot size cannot be zero
+ErrLotSizeLTEZero       Lot size cannot be <= zero
 ErrNoLotFound           No lot available, please create a lot first
 ErrParkingFull          Sorry, parking lot is full
 ErrInvalidSlot          Slot invalid
@@ -56,6 +56,7 @@ ErrParking              Parking slot is empty
 ErrInvalidCarNumber     Invalid indian car number plate format
 ErrNotFound             Not found
 Error                   Unexpected error occured
+ErrInvalidCommand       Invalid command
 RegexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$
 ```
 
@@ -63,3 +64,4 @@ RegexCarNumber          ^[A-Z]{2}-[0-9]{2}-[A-Z]{1,2}-[0-9]{1,4}$
 
 - Nitin Mishra
 - geekymishnit@gmail.com
+- +91-9535507255
