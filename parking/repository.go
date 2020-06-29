@@ -41,9 +41,6 @@ func (r *postgresRepository) Close() {
 }
 
 func (r *postgresRepository) CreateLot(ctx context.Context, maxslotscount uint32) error {
-	if maxslotscount == 0 {
-		return ErrLotSizeZero
-	}
 
 	_, err := r.db.ExecContext(ctx, "DELETE FROM parks")
 
@@ -149,11 +146,6 @@ func (r *postgresRepository) PostUnpark(ctx context.Context, slotnum uint32) err
 	var UsedSlotsCount uint32
 	var MaxSlotsCount uint32
 	var CurrSlotNum uint32
-
-	// is slot invalid?
-	if slotnum == 0 {
-		return ErrInvalidSlot
-	}
 
 	row := r.db.QueryRowContext(ctx, `SELECT id, max_slots_count, used_slots_count, next_slot_num FROM parking_lots ORDER BY created_at DESC LIMIT 1`)
 	if err := row.Scan(&ParkingLotID, &MaxSlotsCount, &UsedSlotsCount, &CurrSlotNum); err != nil {
