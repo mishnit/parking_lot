@@ -8,7 +8,7 @@ import (
 
 var (
 	ErrNoLotFound       = errors.New("No lot available, please create a lot first")
-	ErrLotSizeZero      = errors.New("Lot size cannot be zero")
+	ErrLotSizeLTEZero   = errors.New("Lot size cannot be <= zero")
 	ErrParkingFull      = errors.New("Sorry, parking lot is full")
 	ErrInvalidSlot      = errors.New("Slot invalid")
 	ErrParking          = errors.New("Parking slot is empty")
