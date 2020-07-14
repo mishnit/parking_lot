@@ -36,7 +36,7 @@ slot_number_for_registration_number <car_reg_number>      Display slot number fo
 exit                                                      Exit from shell
 ```
 
-## 🐶 PASS FILE AS AN ARGUMENT:
+## 🐶 PASS FILE AS AN ARGUMENT (TEST CASES):
 ```
 $ ./build/parking_lot bin/fixtures/file_input.txt
 ```
